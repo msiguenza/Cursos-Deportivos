@@ -1,0 +1,46 @@
+package modelo;
+
+public class Monitores {
+	private static String dni,nombre,apellido,direccion;
+	private static int edad, cod_curso;
+	public static String getDni() {
+		return dni;
+	}
+	public static void setDni(String dni) {
+		Monitores.dni = dni;
+	}
+	public static String getNombre() {
+		return nombre;
+	}
+	public static void setNombre(String nombre) {
+		Monitores.nombre = nombre;
+	}
+	public static String getApellido() {
+		return apellido;
+	}
+	public static void setApellido(String apellido) {
+		Monitores.apellido = apellido;
+	}
+	public static String getDireccion() {
+		return direccion;
+	}
+	public static void setDireccion(String direccion) {
+		Monitores.direccion = direccion;
+	}
+	public static int getEdad() {
+		return edad;
+	}
+	public static void setEdad(int edad) {
+		Monitores.edad = edad;
+	}
+	public static int getCod_curso() {
+		return cod_curso;
+	}
+	public static void setCod_curso(int cod_curso) {
+		Monitores.cod_curso = cod_curso;
+	}
+	
+	
+
+
+}

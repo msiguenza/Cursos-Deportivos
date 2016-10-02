@@ -1,0 +1,158 @@
+package controlador;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import modelo.Conexion;
+import modelo.ModeloCursosyDeportes;
+
+import VistasFinales.*;
+
+public class ControladorCursosyDeportes implements ActionListener{
+
+	
+	GestionCursosyDeportes gestmcursdeport;
+	ModeloCursosyDeportes modeloCursosyDeportes;
+	
+	
+	public ControladorCursosyDeportes(GestionCursosyDeportes cursdeport) throws IOException, SQLException{
+		gestmcursdeport=cursdeport;
+		modeloCursosyDeportes = new ModeloCursosyDeportes();
+	}
+	
+	public void iniciar(){
+		gestmcursdeport.setVisible(true);
+		gestmcursdeport.btnCrearCurso.setActionCommand("Crear Curso");
+		gestmcursdeport.btnCrearCurso.addActionListener(this);
+		//---------------------------------------------------
+		gestmcursdeport.btnModificarCurso.setActionCommand("Modificar Curso");
+		gestmcursdeport.btnModificarCurso.addActionListener(this);
+		//---------------------------------------------------
+		
+		gestmcursdeport.btnRefrescarCurso.setActionCommand("Refrescar Curso");
+		gestmcursdeport.btnRefrescarCurso.addActionListener(this);
+		//---------------------------------------------------
+		gestmcursdeport.btnEliminarCurso.setActionCommand("Eliminar Curso");
+		gestmcursdeport.btnEliminarCurso.addActionListener(this);
+		//---------------------------------------------------
+		
+		gestmcursdeport.btnCrearDeporte.setActionCommand("Crear Deporte");
+		gestmcursdeport.btnCrearDeporte.addActionListener(this);
+		//---------------------------------------------------
+		gestmcursdeport.btnModificarDeporte.setActionCommand("Modificar Deporte");
+		gestmcursdeport.btnModificarDeporte.addActionListener(this);
+		//---------------------------------------------------
+		
+		gestmcursdeport.btnRefrescarDeporte.setActionCommand("Refrescar Deporte");
+		gestmcursdeport.btnRefrescarDeporte.addActionListener(this);
+		//---------------------------------------------------
+		gestmcursdeport.btnEliminarDeporte.setActionCommand("Eliminar Deporte");
+		gestmcursdeport.btnEliminarDeporte.addActionListener(this);
+		//---------------------------------------------------
+		
+		generarTablaDeporte();
+		generarTablaCursos();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	String comando=e.getActionCommand();
+	}
+	
+public void generarTablaDeporte () {
+		
+		try{
+			
+			DefaultTableModel m;
+			
+			String titulos[] = {"Nombre del Deporte","Instalación","Riesgo"};
+			m = new DefaultTableModel(null,titulos);
+			
+			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(m);
+			this.gestmcursdeport.tableDeportes.setRowSorter(sorter);
+	     	
+			DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+			tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		
+			String fila[]=new String[titulos.length];
+			this.gestmcursdeport.tableDeportes.setModel(m);
+			
+			ResultSet resultSql = modeloCursosyDeportes.prepararTablaCursos();
+			
+			while(resultSql.next()){
+					fila[0]=resultSql.getString("nombredeporte");
+					fila[1]=resultSql.getString("instalacion");
+					fila[2]=resultSql.getString("riesgo");
+					
+					m.addRow(fila);
+			}
+			
+			int i;
+			i=0;
+			while(i<titulos.length){
+				this.gestmcursdeport.tableDeportes.getColumnModel().getColumn(i).setCellRenderer(tcr);
+				i++;
+			}
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null, "Error al extraer los datos de la tabla");
+		}
+	}
+
+
+public void generarTablaCursos(){
+	
+	try{
+		
+		DefaultTableModel m;
+		
+		String titulos[] = {"Código_Curso", "Nombre_Deporte","Hora_Inicio","Fecha_Inicio", "Nivel","DNI_Monitor","Plazas"};
+		m = new DefaultTableModel(null,titulos);
+		
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(m);
+		this.gestmcursdeport.tableCursos.setRowSorter(sorter);
+     	
+		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+		tcr.setHorizontalAlignment(SwingConstants.LEFT);
+		
+	
+		String fila[]=new String[titulos.length];
+		this.gestmcursdeport.tableCursos.setModel(m);
+		while(resulSql.next()){
+				fila[0]=resulSql.getString("cod_curso");
+				fila[1]=resulSql.getString("nombredeporte");
+				fila[2]=resulSql.getString("hora_inicio");
+				fila[3]=resulSql.getString("fecha_inicio");
+				fila[4]=resulSql.getString("nivel");
+				fila[5]=resulSql.getString("dnimonitor");
+				fila[6]=resulSql.getString("plazas");
+				
+				
+				m.addRow(fila);
+		}
+		
+		int i=0;
+		while(i<titulos.length){
+			tablaCursos.getColumnModel().getColumn(i).setCellRenderer(tcr);
+			i++;
+		}
+		
+	}catch(Exception e){
+		e.printStackTrace();
+		JOptionPane.showMessageDialog(null, "Error al extraer los datos de la tabla");
+	}
+}
+	
+	
+}
+}

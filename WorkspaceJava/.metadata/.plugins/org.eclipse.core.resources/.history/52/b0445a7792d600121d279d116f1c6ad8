@@ -1,0 +1,55 @@
+package modelo;
+
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+
+import conexiones.Conexion;
+
+public class ModeloCrearAlumnos {
+
+
+	Conexion conx;
+	
+	public  ModeloCrearAlumnos() throws IOException, SQLException{
+		
+		conx = new Conexion();
+		
+	}
+	
+	public ResultSet CrearAlumnos(String dni,String nombre, String apellido, String direccion, String edad, String cod_curso) throws SQLException, IOException {
+		
+	
+	
+		
+		String sql="INSERT INTO alumnos (dni,nombre,apellido,direccion,edad,cod_curso) VALUES" + "(?,?,?,?,?,?)";//Consulta preparada para introducir los valores posteriormente
+		
+		
+		PreparedStatement prest=(PreparedStatement) conx.getConectado().prepareStatement(sql);
+		
+		prest.setString(1, dni);
+		prest.setString(2, nombre);
+		prest.setString(3, apellido);
+		prest.setString(4, direccion);
+		prest.setString(5, edad);
+		prest.setString(6, cod_curso);
+		
+		if(dni.length()<=0 || cod_curso.length()<=0){
+			JOptionPane.showMessageDialog(null, "El dni y el código del curso son obligatorios");
+		}else{
+			prest.execute();
+			JOptionPane.showMessageDialog(null, "Alumno creado con éxito");
+			
+		}
+		
+		
+	return null;
+	
+	}
+}
+	

@@ -1,0 +1,263 @@
+package VistasFinales;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Toolkit;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import java.awt.Choice;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.Font;
+import javax.swing.border.LineBorder;
+
+import conexiones.*;
+
+import com.mysql.jdbc.PreparedStatement;
+
+
+import java.awt.SystemColor;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.awt.Color;
+
+
+public class ModificarCursos extends JDialog {
+
+	public final JPanel contentPanel = new JPanel();
+	public JTextField textFieldcod_curso;
+	public JTextField textFieldDeporte;
+	public String datosFila[];
+	public JButton btnGuardarCambios;
+	public JButton btnCancelar;
+
+	Conexion conx = new Conexion();
+	private JTextField textFieldHoraInicio;
+	private JTextField textFieldFechaInicio;
+	private JTextField textFieldNivel;
+	private JTextField textFieldDniMonitor;
+	private JTextField textFieldplazas;
+	public ModificarCursos(String fila[]) {
+		datosFila=fila;
+		setTitle("Modificar Usuario");
+		setIconImage(Toolkit.getDefaultToolkit().getImage("src/Images/admin.png"));
+		setUndecorated(true);
+		setModal(true);
+		setBounds(100, 100, 511, 382);
+		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		setLocationRelativeTo(null);
+		contentPanel.setLayout(null);
+		
+		
+	//	JOptionPane.showMessageDialog(null, "\n0: "+datosFila[0]+" \n1: "+datosFila[1]+" \n2: "+datosFila[2]+" \n3: "+datosFila[3]+" \n4: "+datosFila[4]+" \n5: "+datosFila[5]+" \n6: "+datosFila[6]);
+		
+		JLabel lblnombredeporte = new JLabel("* COD_CURSO");
+		lblnombredeporte.setForeground(Color.RED);
+		lblnombredeporte.setBounds(24, 40, 78, 14);
+		lblnombredeporte.setFont(new Font("Comic Sans MS", Font.ITALIC, 13));
+		contentPanel.add(lblnombredeporte);
+			
+		textFieldcod_curso = new JTextField();
+		textFieldcod_curso.setBounds(112, 39, 140, 20);
+		textFieldcod_curso.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		textFieldcod_curso.setColumns(10);
+		textFieldcod_curso.setText(fila[0]);
+		contentPanel.add(textFieldcod_curso);
+		
+		JLabel lbldeporte = new JLabel("Nombre Deporte");
+		lbldeporte.setBounds(24, 102, 78, 14);
+		lbldeporte.setFont(new Font("Comic Sans MS", Font.ITALIC, 13));
+		contentPanel.add(lbldeporte);
+		
+		textFieldDeporte = new JTextField();
+		textFieldDeporte.setBounds(112, 101, 140, 20);
+		textFieldDeporte.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		textFieldDeporte.setColumns(10);
+		textFieldDeporte.setText(fila[1]);
+		contentPanel.add(textFieldDeporte);
+		
+		
+		//-------- Botones ---------
+		btnGuardarCambios = new JButton("Guardar");
+		btnGuardarCambios.setMnemonic('g');
+		btnGuardarCambios.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnGuardarCambios.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		btnGuardarCambios.setBounds(21, 280, 112, 31);
+		btnGuardarCambios.setIcon(new ImageIcon("src/images/save.png"));
+		contentPanel.add(btnGuardarCambios);
+		
+		btnGuardarCambios.addActionListener(new ActionListener(){
+			public void actionPerformed (ActionEvent o){
+				btnGurdarCambiosActionPerformed(o);
+			}
+		});
+		
+		
+		btnCancelar = new JButton("Cancelar");
+		btnCancelar.setMnemonic('c');
+		btnCancelar.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnCancelar.setBounds(160, 280, 112, 31);
+		btnCancelar.setIcon(new ImageIcon("src/images/adiooos.png"));
+		contentPanel.add(btnCancelar);
+		
+		JLabel labelhorainicio = new JLabel("Hora_Inicio");
+		labelhorainicio.setFont(new Font("Comic Sans MS", Font.ITALIC, 13));
+		labelhorainicio.setBounds(24, 150, 78, 14);
+		contentPanel.add(labelhorainicio);
+		
+		textFieldHoraInicio = new JTextField();
+		textFieldHoraInicio.setText((String) null);
+		textFieldHoraInicio.setColumns(10);
+		textFieldHoraInicio.setText(fila[2]);		
+		textFieldHoraInicio.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		textFieldHoraInicio.setBounds(112, 149, 140, 20);
+		contentPanel.add(textFieldHoraInicio);
+		
+		
+		JTextField txtCamposObligatorios = new JTextField();
+		txtCamposObligatorios.setOpaque(false);
+		txtCamposObligatorios.setForeground(Color.RED);
+		txtCamposObligatorios.setText("*  Campos obligatorios");
+		txtCamposObligatorios.setBounds(45, 328, 188, 20);
+		contentPanel.add(txtCamposObligatorios);
+		txtCamposObligatorios.setEditable(false);
+		txtCamposObligatorios.setColumns(10);
+		
+		JLabel labelFechaInicio = new JLabel("Fecha_Inicio");
+		labelFechaInicio.setFont(new Font("Comic Sans MS", Font.ITALIC, 13));
+		labelFechaInicio.setBounds(24, 194, 78, 14);
+		contentPanel.add(labelFechaInicio);
+		
+		textFieldFechaInicio = new JTextField();
+		textFieldFechaInicio.setText((String) null);
+		textFieldFechaInicio.setColumns(10);
+		textFieldFechaInicio.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		textFieldFechaInicio.setBounds(112, 193, 140, 20);
+		textFieldFechaInicio.setText(fila[3]);		
+		contentPanel.add(textFieldFechaInicio);
+		
+		JLabel labelNivel = new JLabel("Nivel");
+		labelNivel.setFont(new Font("Comic Sans MS", Font.ITALIC, 13));
+		labelNivel.setBounds(24, 238, 78, 14);
+		contentPanel.add(labelNivel);
+		
+		textFieldNivel = new JTextField();
+		textFieldNivel.setText((String) null);
+		textFieldNivel.setColumns(10);
+		textFieldNivel.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		textFieldNivel.setBounds(112, 237, 140, 20);
+		textFieldNivel.setText(fila[4]);		
+		contentPanel.add(textFieldNivel);
+		
+		JLabel labeldnimonitor = new JLabel("DNI Monitor");
+		labeldnimonitor.setFont(new Font("Comic Sans MS", Font.ITALIC, 13));
+		labeldnimonitor.setBounds(273, 41, 78, 14);
+		contentPanel.add(labeldnimonitor);
+		
+		JLabel labelPlazas = new JLabel("Plazas");
+		labelPlazas.setFont(new Font("Comic Sans MS", Font.ITALIC, 13));
+		labelPlazas.setBounds(273, 103, 78, 14);
+		contentPanel.add(labelPlazas);
+		
+		textFieldplazas = new JTextField();
+		textFieldplazas.setText((String) null);
+		textFieldplazas.setColumns(10);
+		textFieldplazas.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		textFieldplazas.setBounds(361, 102, 140, 20);
+		textFieldplazas.setText(fila[5]);		
+		contentPanel.add(textFieldplazas);
+		
+		textFieldDniMonitor = new JTextField();
+		textFieldDniMonitor.setText((String) null);
+		textFieldDniMonitor.setColumns(10);
+		textFieldDniMonitor.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		textFieldDniMonitor.setBounds(361, 40, 140, 20);
+		textFieldDniMonitor.setText(fila[6]);		
+		contentPanel.add(textFieldDniMonitor);
+		
+		// Labels y textfields
+		
+		
+		JLabel lblImagenFondo = new JLabel("");
+		lblImagenFondo.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		lblImagenFondo.setBounds(0, 0, 539, 389);
+		lblImagenFondo.setIcon(new ImageIcon("src/images/fondito5.jpg"));
+		contentPanel.add(lblImagenFondo);
+		
+		JLabel labelImagen = new JLabel("");
+		labelImagen.setBounds(218, 0, 321, 389);
+		labelImagen.setIcon(new ImageIcon("src/images/createuserr.png"));
+		contentPanel.add(labelImagen);
+		
+		btnCancelar.addActionListener(new ActionListener(){
+			public void actionPerformed (ActionEvent o){
+				btnCancelarPerformed(o);
+			}
+			private void btnCancelarPerformed(ActionEvent o) {
+				dispose();
+			}
+		});
+		
+		datosFila=fila;//Inicializamos el atributo de la clase datos Fila con el array de string fila que pasamos por parametros en el constructor de la clase 
+		// para poder cambiar el dni también al hacer el Update de la consulta al guardar los cambios . Si no se hace este cambio podríamos cambiar cualquier
+		// valor de los atributos menos el dni 
+		
+	}
+	
+	protected void btnGurdarCambiosActionPerformed (ActionEvent o){
+		try{
+		String sql="UPDATE cursos SET cod_curso=?, nombredeporte=?, hora_inicio=?, fecha_inicio=?, nivel=?, dnimonitor=?, plazas=?  where cod_curso=?";
+		PreparedStatement prest=(PreparedStatement) conx.getConectado().prepareStatement(sql);
+		
+		String cod_curso, nombrecurso,  nombredeporte,  hora_inicio,  fecha_inicio,  nivel,  dnimonitor;
+		String plazas;
+
+		cod_curso=textFieldcod_curso.getText();
+		nombredeporte=textFieldDeporte.getText();
+		hora_inicio=textFieldHoraInicio.getText();
+		fecha_inicio=textFieldFechaInicio.getText();
+		nivel=textFieldNivel.getText();
+		dnimonitor=textFieldDniMonitor.getText();
+		plazas=textFieldplazas.getText();
+		
+		
+		
+		prest.setString(1, nombredeporte);
+		prest.setString(2, hora_inicio);
+		prest.setString(3,fecha_inicio );
+		prest.setString(4, nivel);
+		prest.setString(5, dnimonitor);
+		prest.setString(6, plazas);
+		
+		
+		if(nombredeporte.length()<=0){
+			JOptionPane.showMessageDialog(null, "El nombre del deporte es obligatorio");
+		}else{
+			prest.executeUpdate();
+			JOptionPane.showMessageDialog(null, "Curso modificado con éxito");
+			dispose();
+		}
+		
+	}catch(SQLException exSql){
+		JOptionPane.showMessageDialog(null, exSql.getMessage());
+	}catch(Exception e){
+	    JOptionPane.showMessageDialog(null, "Error en la conexión con la base de datos","Error",JOptionPane.ERROR_MESSAGE);
+}
+
+	}
+}

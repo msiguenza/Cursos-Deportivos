@@ -1,0 +1,65 @@
+package controlador;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import conexiones.*;
+import modelo.ModeloCrearAlumnos;
+import modelo.ModeloCrearCurso;
+import modelo.ModeloCursosyDeportes;
+import modelo.ModeloModificarMonitores;
+
+import VistasFinales.*;
+
+public class ControladorModificarMonitores implements ActionListener{
+
+	
+	ModificarMonitores modifimonitores;
+	ModeloModificarMonitores modelomodificarmonitores;
+	
+	
+	public ControladorModificarMonitores(ModificarMonitores modificarmonitores) throws IOException, SQLException{
+		modifimonitores=modificarmonitores;
+		modelomodificarmonitores = new ModeloModificarMonitores();
+	}
+	
+	public void iniciar(){
+		modifimonitores.setVisible(true);
+		modifimonitores.btnGuardarCambios.setActionCommand("Guardar Cambios");
+		modifimonitores.btnGuardarCambios.addActionListener(this);
+		//---------------------------------------------------
+		modifimonitores.btnCancelar.setActionCommand("Salir");
+		modifimonitores.btnCancelar.addActionListener(this);
+		
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	String comando=e.getActionCommand();
+	
+
+	if (comando.equals("Guardar Cambios")) {
+		
+	}
+	
+
+	if (comando.equals("Salir")) {
+		this.modifimonitores.dispose();
+	}
+	
+	
+	}
+	
+	
+}
+

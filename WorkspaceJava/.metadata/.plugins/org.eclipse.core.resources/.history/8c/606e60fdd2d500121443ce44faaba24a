@@ -1,0 +1,71 @@
+package controlador;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import conexiones.*;
+
+import modelo.ModeloCrearDeporte;
+import modelo.ModeloCursosyDeportes;
+
+import VistasFinales.*;
+
+public class ControladorCrearDeportes implements ActionListener{
+
+	
+	CrearDeportes creardeport;
+	ModeloCrearDeporte modelocreardeportes;
+	
+	
+	public ControladorCrearDeportes(CrearDeportes creardeportes) throws IOException, SQLException{
+		creardeport=creardeportes;
+		modelocreardeportes = new ModeloCrearDeporte();
+	}
+	
+	public void iniciar(){
+		creardeport.setVisible(true);
+		creardeport.btnCrearDeportes.setActionCommand("Crear Deportes");
+		creardeport.btnCrearDeportes.addActionListener(this);
+		//---------------------------------------------------
+		creardeport.Salir.setActionCommand("Salir");
+		creardeport.Salir.addActionListener(this);
+		
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	String comando=e.getActionCommand();
+	
+
+	if (comando.equals("Crear Deportes")) {
+	
+		
+		
+		
+		
+		
+		
+		
+	}
+	
+
+	if (comando.equals("Salir")) {
+		this.creardeport.dispose();
+	}
+	
+	
+	}
+	
+	
+}
+

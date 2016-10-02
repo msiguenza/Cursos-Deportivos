@@ -1,0 +1,179 @@
+package VistasFinales;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Toolkit;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import java.awt.Choice;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.Font;
+import javax.swing.border.LineBorder;
+
+import conexiones.*;
+import com.mysql.jdbc.PreparedStatement;
+
+
+import java.awt.SystemColor;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.awt.Color;
+
+
+public class CrearDeportes extends JDialog {
+
+	public final JPanel contentPanel = new JPanel();
+	public JTextField textFieldNomDep;
+	public JTextField textFieldInstalacion;
+	public JTextField textFieldRiesgo;
+	public JTextField txtCamposObligatorios;
+	public JButton btnCrearDeportes;
+	public JButton Salir;
+	public CrearDeportes() {
+		setTitle("Crear Usuarios");
+		setIconImage(Toolkit.getDefaultToolkit().getImage("src/Images/admin.png"));
+		setModal(true);
+		setUndecorated(true);
+		setBounds(100, 100, 539, 389);
+		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		setLocationRelativeTo(null);
+		contentPanel.setLayout(null);
+		JLabel lblnombreDeporte = new JLabel("*  Nombre:");
+		lblnombreDeporte.setForeground(Color.RED);
+		lblnombreDeporte.setBounds(24, 40, 114, 14);
+		lblnombreDeporte.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
+		contentPanel.add(lblnombreDeporte);
+		
+		textFieldNomDep = new JTextField();
+		textFieldNomDep.setBounds(148, 40, 140, 20);
+		textFieldNomDep.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		contentPanel.add(textFieldNomDep);
+		textFieldNomDep.setColumns(10);
+		
+		JLabel lblInstalacion = new JLabel("Instalaci\u00F3n:");
+		lblInstalacion.setForeground(Color.WHITE);
+		lblInstalacion.setBounds(24, 71, 114, 14);
+		lblInstalacion.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
+		contentPanel.add(lblInstalacion);
+		
+		
+		textFieldInstalacion = new JTextField();
+		textFieldInstalacion.setBounds(148, 71, 140, 20);
+		textFieldInstalacion.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		contentPanel.add(textFieldInstalacion);
+		textFieldInstalacion.setColumns(10);
+		
+		JLabel lblRiesgo = new JLabel("Riesgo:");
+		lblRiesgo.setForeground(Color.WHITE);
+		lblRiesgo.setBounds(24, 102, 114, 14);
+		lblRiesgo.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
+		contentPanel.add(lblRiesgo);
+		
+		textFieldRiesgo = new JTextField();
+		textFieldRiesgo.setBounds(148, 102, 140, 20);
+		textFieldRiesgo.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		contentPanel.add(textFieldRiesgo);
+		textFieldRiesgo.setColumns(10);
+		
+		btnCrearDeportes = new JButton("A\u00F1adir");
+		btnCrearDeportes.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnCrearDeportes.setMnemonic('a');
+		btnCrearDeportes.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		btnCrearDeportes.setBounds(24, 304, 120, 31);
+		btnCrearDeportes.setIcon(new ImageIcon("src/images/confirm.png"));
+		contentPanel.add(btnCrearDeportes);
+		
+		
+		btnCrearDeportes.addActionListener(new ActionListener(){
+			public void actionPerformed (ActionEvent o){
+				btnCrearDeportesActionPerformed(o);
+			}
+		});
+		
+		
+		Salir = new JButton("Cancelar");
+		Salir.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		Salir.setMnemonic('c');
+		Salir.setBounds(168, 304, 120, 31);
+		Salir.setIcon(new ImageIcon("src/images/adiooos.png"));
+		contentPanel.add(Salir);
+		
+		Salir.addActionListener(new ActionListener(){
+			public void actionPerformed (ActionEvent o){
+				SalirActionPerformed(o);
+			}
+			private void SalirActionPerformed (ActionEvent o){
+				dispose();
+			}
+
+		});
+		
+		JLabel labelusuarios = new JLabel("");
+		labelusuarios.setIcon(new ImageIcon("src/images/users.png"));
+		labelusuarios.setBounds(282, 0, 257, 389);
+		contentPanel.add(labelusuarios);
+		
+		
+		txtCamposObligatorios = new JTextField();
+		txtCamposObligatorios.setOpaque(false);
+		txtCamposObligatorios.setForeground(Color.RED);
+		txtCamposObligatorios.setText("*  Campos obligatorios");
+		txtCamposObligatorios.setBounds(34, 346, 188, 20);
+		contentPanel.add(txtCamposObligatorios);
+		txtCamposObligatorios.setEditable(false);
+		txtCamposObligatorios.setColumns(10);
+		
+		
+		
+	}
+	
+	protected void btnCrearDeportesActionPerformed (ActionEvent o){
+	/*	try{
+			
+			String sql="INSERT INTO deportes (nombredeporte,instalacion,riesgo) VALUES" + "(?,?,?)";//Consulta preparada para introducir los valores posteriormente
+			String nombredeporte, instalacion, riesgo;
+			
+			nombredeporte=textFieldNomDep.getText();
+			instalacion=textFieldInstalacion.getText();
+			riesgo=textFieldRiesgo.getText();
+			
+			
+			PreparedStatement prest=(PreparedStatement) c.getConectado().prepareStatement(sql);
+			
+			prest.setString(1, nombredeporte);
+			prest.setString(2, instalacion);
+			prest.setString(3, riesgo);
+			
+			
+			if(nombredeporte.length()<=0){
+				JOptionPane.showMessageDialog(null, "El nombre del deporte es obligatorio");
+			}else{
+				prest.execute();
+				JOptionPane.showMessageDialog(null, "Deporte creado con éxito");
+				dispose();
+			}
+			
+			}catch(SQLException exSql){
+				JOptionPane.showMessageDialog(null, "Error, posibles causas: \n- Ya existe un Deporte con ese nombre \n- Asegúrese de tener el host activo");
+			}catch(Exception e){
+			    JOptionPane.showMessageDialog(null, "Error en la conexión con la base de datos, as","Error",JOptionPane.ERROR_MESSAGE);
+		}*/
+		
+	}
+}

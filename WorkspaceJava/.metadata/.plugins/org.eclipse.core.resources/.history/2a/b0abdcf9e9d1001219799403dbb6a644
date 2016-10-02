@@ -1,0 +1,57 @@
+package controlador;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
+import modelo.Conexion;
+
+import VistasFinales.*;
+
+public class ControladorVentanaPrinci implements ActionListener{
+
+	VentanaPrincipal princi;
+	GestionMonitoresyAlumnos monalum;
+	GestionCursosyDeportes cursdeport;
+	
+	public ControladorVentanaPrinci(VentanaPrincipal ac){
+		princi=ac;
+	}
+	
+	public void iniciar(){
+		
+		princi.btnGestionMonitoresyAlumnos.setActionCommand("Gestion alumno");
+		princi.btnGestionMonitoresyAlumnos.addActionListener(this);
+		//---------------------------------------------------
+		princi.btnInfoApli.setActionCommand("Info Apli");
+		princi.btnInfoApli.addActionListener(this);
+		//---------------------------------------------------
+		princi.btnCursosyDeportes.setActionCommand("Gestion Cursos y Deportes");
+		princi.btnCursosyDeportes.addActionListener(this);
+	
+	}
+
+	
+	public void actionPerformed(ActionEvent e) {
+	String comando=e.getActionCommand();
+	
+	if(comando.equals("Gestion alumno")){
+		GestionMonitoresyAlumnos monalum=new GestionMonitoresyAlumnos();
+		monalum.setVisible(true);
+		new ControladorMonitoresyAlumnos(monalum).iniciar();	
+	}
+	
+	if(comando.equals("Info Apli")){
+		
+	}
+	
+	if(comando.equals("Gestion Cursos y Deportes")){
+		GestionCursosyDeportes curdep=new GestionCursosyDeportes();
+		curdep.setVisible(true);
+		new ControladorCursosyDeportes(cursdeport).iniciar();
+	}
+		
+	}
+}

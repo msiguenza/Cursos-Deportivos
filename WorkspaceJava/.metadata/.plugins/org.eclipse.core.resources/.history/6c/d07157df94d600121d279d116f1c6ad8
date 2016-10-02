@@ -1,0 +1,72 @@
+package modelo;
+
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+
+import conexiones.Conexion;
+
+public class ModeloCrearMonitores {
+
+
+	Conexion conx;
+	
+	public  ModeloCrearMonitores() throws IOException, SQLException{
+		
+		conx = new Conexion();
+		
+	}
+	
+	public ResultSet CrearMonitor(String dnimonitor, String nombre, String apellidos, ) {
+		
+
+				
+				String sql="INSERT INTO monitores (dnimonitor,nombre,apellidos,telefono,nomina) VALUES" + "(?,?,?,?,?)";//Consulta preparada para introducir los valores posteriormente
+				String dnimonitor, nombre, apellidos, telefono;
+				int nomina;
+				dnimonitor=textFieldDni.getText();
+				nombre=textFieldNombre.getText();
+				apellidos=textFieldApellidos.getText();
+				telefono=textFieldTeleefono.getText();
+				
+				if(comboBoxTipo.getSelectedItem().toString().equalsIgnoreCase("No")){
+					nomina=0;
+				}else{
+					nomina=1;
+				}
+				
+				PreparedStatement prest=(PreparedStatement) c.getConectado().prepareStatement(sql);
+				
+				prest.setString(1, dnimonitor);
+				prest.setString(2, nombre);
+				prest.setString(3, apellidos);
+				prest.setString(4, telefono);
+				prest.setInt(5, nomina);
+				
+				if(dnimonitor.length()<=0) {
+					JOptionPane.showMessageDialog(null, "El dni del monitor es obligatorio");
+				}else{
+					prest.execute();
+					JOptionPane.showMessageDialog(null, "Monitor creado con éxito");
+					dispose();
+				}
+				
+				}catch(SQLException exSql){
+					JOptionPane.showMessageDialog(null, "Error, posibles causas: \n- Ya existe un Monitor con ese Dni \n- Asegúrese de tener el host activo");
+				}catch(Exception e){
+				    JOptionPane.showMessageDialog(null, "Error en la conexión con la base de datos, as","Error",JOptionPane.ERROR_MESSAGE);
+			}
+			
+		
+
+	return null;
+	
+	}
+}
+	

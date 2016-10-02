@@ -1,0 +1,51 @@
+package modelo;
+
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
+
+public class ModeloCursosyDeportes {
+
+	Conexion conx;
+	
+	public  ModeloCursosyDeportes() throws IOException, SQLException{
+		
+		conx = new Conexion("localhost", "cursosdeportivos", "root", null);
+		
+	}
+	
+	
+	public ResultSet prepararTablaCursos() {
+		try{
+			Statement sql=(Statement) conx.getConectado().createStatement();
+			ResultSet resulSql=sql.executeQuery("SELECT * FROM cursos");
+			
+			
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al extraer los datos de la tabla");
+		}
+		return ResultSet;
+	}
+	
+	
+	public void prepararTablaDeportes() {
+		try{
+			Statement sql=(Statement) conx.getConectado().createStatement();
+			ResultSet resulSql=sql.executeQuery("SELECT * FROM deportes");
+			DefaultTableModel m;
+			
+			
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null, "Error al extraer los datos de la tabla");
+		}
+	}
+	
+}

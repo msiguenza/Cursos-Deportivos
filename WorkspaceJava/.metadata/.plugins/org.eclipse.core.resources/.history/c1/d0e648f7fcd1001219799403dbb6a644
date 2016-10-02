@@ -1,0 +1,139 @@
+package VistasFinales;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+public class GestionCursosyDeportes extends JFrame {
+
+	public JPanel contentPane;
+	private JPanel panel;
+	private JButton button;
+	private JLabel label;
+	private JScrollPane scrollPane;
+	private JButton button_1;
+	private JButton button_2;
+	private JButton button_3;
+	private JButton button_4;
+	private JLabel label_1;
+	private JButton btnCrearCurso;
+	private JButton btnModificarCurso;
+	private JButton btnEliminarCurso;
+	private JScrollPane scrollPane_1;
+	private JTable tableDeportes;
+	private JButton btnRefrescarCurso;
+
+	/**
+	 * Launch the application.
+	 */
+
+
+	/**
+	 * Create the frame.
+	 */
+	public GestionCursosyDeportes() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 916, 575);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		panel = new JPanel();
+		panel.setLayout(null);
+		panel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panel.setBounds(0, 0, 947, 568);
+		contentPane.add(panel);
+		
+		button = new JButton("Atr\u00E1s");
+		button.setMnemonic('x');
+		button.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		button.setBounds(796, 506, 112, 37);
+		panel.add(button);
+		
+		label = new JLabel("Cursos ");
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 16));
+		label.setBounds(42, 11, 666, 23);
+		panel.add(label);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBackground(new Color(255, 250, 205));
+		scrollPane.setBounds(42, 45, 666, 170);
+		panel.add(scrollPane);
+		
+		button_1 = new JButton("Crear");
+		button_1.setMnemonic('c');
+		button_1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		button_1.setBounds(736, 58, 117, 29);
+		panel.add(button_1);
+		
+		button_2 = new JButton("Modificar");
+		button_2.setMnemonic('m');
+		button_2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		button_2.setBounds(736, 94, 117, 29);
+		panel.add(button_2);
+		
+		button_3 = new JButton("Refrescar");
+		button_3.setMnemonic('r');
+		button_3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		button_3.setBounds(736, 163, 117, 29);
+		panel.add(button_3);
+		
+		button_4 = new JButton("Eliminar");
+		button_4.setMnemonic('e');
+		button_4.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		button_4.setBounds(736, 128, 117, 29);
+		panel.add(button_4);
+		
+		label_1 = new JLabel("Deportes");
+		label_1.setHorizontalAlignment(SwingConstants.CENTER);
+		label_1.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 16));
+		label_1.setBounds(42, 270, 666, 23);
+		panel.add(label_1);
+		
+		btnCrearCurso = new JButton("Crear");
+		btnCrearCurso.setMnemonic('a');
+		btnCrearCurso.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnCrearCurso.setBounds(736, 321, 117, 29);
+		panel.add(btnCrearCurso);
+		
+		btnModificarCurso = new JButton("Modificar");
+		btnModificarCurso.setMnemonic('o');
+		btnModificarCurso.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnModificarCurso.setBounds(736, 355, 117, 29);
+		panel.add(btnModificarCurso);
+		
+		btnEliminarCurso = new JButton("Eliminar");
+		btnEliminarCurso.setMnemonic('m');
+		btnEliminarCurso.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnEliminarCurso.setBounds(736, 389, 117, 29);
+		panel.add(btnEliminarCurso);
+		
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBackground(new Color(255, 250, 205));
+		scrollPane_1.setBounds(48, 307, 660, 170);
+		panel.add(scrollPane_1);
+		
+		tableDeportes = new JTable();
+		scrollPane_1.setViewportView(tableDeportes);
+		
+		btnRefrescarCurso = new JButton("Refrescar");
+		btnRefrescarCurso.setMnemonic('s');
+		btnRefrescarCurso.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnRefrescarCurso.setBounds(736, 423, 117, 29);
+		panel.add(btnRefrescarCurso);
+	}
+
+}

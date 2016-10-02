@@ -1,0 +1,239 @@
+package VistasFinales;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.FlowLayout;
+import java.awt.Toolkit;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import java.awt.Choice;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.Font;
+import javax.swing.border.LineBorder;
+
+import com.mysql.jdbc.PreparedStatement;
+
+
+import java.awt.SystemColor;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.awt.Color;
+import java.io.IOException;
+
+import javax.swing.SwingConstants;
+
+import modelo.ModeloCrearMonitores;
+
+import conexiones.*;
+
+public class CrearMonitores extends JDialog {
+
+	public final JPanel contentPanel = new JPanel();
+	public JTextField textFieldDni;
+	public JTextField textFieldNombre;
+	public JTextField textFieldApellidos;
+	public JTextField textFieldTeleefono;
+	public JComboBox comboBoxTipo;
+	private JTextField txtCamposObligatorios;
+
+	public JButton btnCrearMonitores;
+	public JButton Salir;
+	
+	public ModeloCrearMonitores crearmonitor;
+	
+	Conexion conx= new Conexion();
+	private JTextField textFieldCodCurso;
+	
+	public CrearMonitores() throws IOException, SQLException {
+		setTitle("Crear Usuarios");
+		setIconImage(Toolkit.getDefaultToolkit().getImage("src/Images/admin.png"));
+		setModal(true);
+		setUndecorated(true);
+		setBounds(100, 100, 539, 389);
+		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		setLocationRelativeTo(null);
+		contentPanel.setLayout(null);
+		JLabel lblDni = new JLabel("*  DNI:");
+		lblDni.setForeground(Color.RED);
+		lblDni.setBounds(24, 40, 114, 14);
+		lblDni.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
+		contentPanel.add(lblDni);
+		
+		
+		crearmonitor=new ModeloCrearMonitores();
+		
+		textFieldDni = new JTextField();
+		textFieldDni.setBounds(148, 40, 140, 20);
+		textFieldDni.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		contentPanel.add(textFieldDni);
+		textFieldDni.setColumns(10);
+		
+		JLabel lblNombre = new JLabel("Nombre:");
+		lblNombre.setForeground(Color.WHITE);
+		lblNombre.setBounds(24, 71, 114, 14);
+		lblNombre.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
+		contentPanel.add(lblNombre);
+		
+		
+		textFieldNombre = new JTextField();
+		textFieldNombre.setBounds(148, 71, 140, 20);
+		textFieldNombre.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		contentPanel.add(textFieldNombre);
+		textFieldNombre.setColumns(10);
+		
+		JLabel lblApellidos = new JLabel("Apellidos:");
+		lblApellidos.setForeground(Color.WHITE);
+		lblApellidos.setBounds(24, 102, 114, 14);
+		lblApellidos.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
+		contentPanel.add(lblApellidos);
+		
+		textFieldApellidos = new JTextField();
+		textFieldApellidos.setBounds(148, 102, 140, 20);
+		textFieldApellidos.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		contentPanel.add(textFieldApellidos);
+		textFieldApellidos.setColumns(10);
+		
+		JLabel lblTeleefono = new JLabel("* Telefono:");
+		lblTeleefono.setHorizontalAlignment(SwingConstants.LEFT);
+		lblTeleefono.setForeground(Color.RED);
+		lblTeleefono.setBounds(24, 133, 114, 14);
+		lblTeleefono.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
+		contentPanel.add(lblTeleefono);
+		
+		textFieldTeleefono = new JTextField();
+		textFieldTeleefono.setBounds(148, 133, 140, 20);
+		textFieldTeleefono.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		contentPanel.add(textFieldTeleefono);
+		textFieldTeleefono.setColumns(10);
+		
+		JLabel lblNomina = new JLabel("*Nomina");
+		lblNomina.setForeground(Color.RED);
+		lblNomina.setBounds(24, 259, 114, 14);
+		lblNomina.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
+		contentPanel.add(lblNomina);
+		
+		comboBoxTipo = new JComboBox();
+		comboBoxTipo.setBounds(148, 259, 140, 20);
+		comboBoxTipo.setBorder(new LineBorder(SystemColor.inactiveCaptionText, 1, true));
+		comboBoxTipo.setModel(new DefaultComboBoxModel(new String[] {"S\u00ED", "No"}));
+		contentPanel.add(comboBoxTipo);
+		
+		btnCrearMonitores = new JButton("A\u00F1adir");
+		btnCrearMonitores.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnCrearMonitores.setMnemonic('a');
+		btnCrearMonitores.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		btnCrearMonitores.setBounds(24, 304, 120, 31);
+		btnCrearMonitores.setIcon(new ImageIcon("src/images/confirm.png"));
+		contentPanel.add(btnCrearMonitores);
+		
+		
+		btnCrearMonitores.addActionListener(new ActionListener(){
+			public void actionPerformed (ActionEvent o){
+				btnCrearMonitoresActionPerformed(o);
+			}
+		});
+		
+		
+		Salir = new JButton("Cancelar");
+		Salir.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		Salir.setMnemonic('c');
+		Salir.setBounds(168, 304, 120, 31);
+		Salir.setIcon(new ImageIcon("src/images/adiooos.png"));
+		contentPanel.add(Salir);
+		
+		Salir.addActionListener(new ActionListener(){
+			public void actionPerformed (ActionEvent o){
+				SalirActionPerformed(o);
+			}
+			private void SalirActionPerformed (ActionEvent o){
+				dispose();
+			}
+
+		});
+		
+		JLabel labelusuarios = new JLabel("");
+		labelusuarios.setIcon(new ImageIcon("src/images/users.png"));
+		labelusuarios.setBounds(282, 0, 257, 389);
+		contentPanel.add(labelusuarios);
+		
+		
+		txtCamposObligatorios = new JTextField();
+		txtCamposObligatorios.setOpaque(false);
+		txtCamposObligatorios.setForeground(Color.RED);
+		txtCamposObligatorios.setText("*  Campos obligatorios");
+		txtCamposObligatorios.setBounds(34, 346, 188, 20);
+		contentPanel.add(txtCamposObligatorios);
+		txtCamposObligatorios.setEditable(false);
+		txtCamposObligatorios.setColumns(10);
+		
+		
+		JLabel labelImagen = new JLabel("");
+		labelImagen.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		labelImagen.setBounds(0, 0, 539, 389);
+		labelImagen.setIcon(new ImageIcon("src/images/fondonotas.jpg"));
+		contentPanel.add(labelImagen);
+		
+		textFieldCodCurso = new JTextField();
+		textFieldCodCurso.setBounds(148, 196, 134, 28);
+		contentPanel.add(textFieldCodCurso);
+		textFieldCodCurso.setColumns(10);
+		
+		JLabel lblCdigoCurso = new JLabel("C\u00F3digo curso");
+		lblCdigoCurso.setBounds(24, 202, 61, 16);
+		contentPanel.add(lblCdigoCurso);
+		
+		
+		
+	}
+	
+	protected void btnCrearMonitoresActionPerformed (ActionEvent o){
+		try{
+			
+			String dnimonitor, nombre, apellidos, idcurso;
+			int nomina,telefono;
+			dnimonitor=textFieldDni.getText();
+			nombre=textFieldNombre.getText();
+			apellidos=textFieldApellidos.getText();
+			telefono=Integer.parseInt(textFieldTeleefono.getText());
+			
+			if(comboBoxTipo.getSelectedItem().toString().equalsIgnoreCase("No")){
+				nomina=0;
+				idcurso = ""; 
+			}else{
+				nomina=1;
+				idcurso = textFieldCodCurso.getText();
+			}
+			
+			if(dnimonitor.length()<=0 || telefono<=0) {
+				JOptionPane.showMessageDialog(null, "El dni del monitor, la nomina y el telefono, son campos obligatorios");
+			}else{
+				crearmonitor.CrearMonitor(dnimonitor, nombre, apellidos, telefono, nomina, idcurso);
+				JOptionPane.showMessageDialog(null, "Monitor creado con éxito");
+				dispose();
+			}
+			
+			}catch(SQLException exSql){
+				JOptionPane.showMessageDialog(null, "Error, posibles causas: \n- Ya existe un Monitor con ese Dni \n- Asegúrese de tener el host activo");
+			}catch(Exception e){
+				e.printStackTrace();
+			    JOptionPane.showMessageDialog(null, "Error en la conexión con la base de datos","Error",JOptionPane.ERROR_MESSAGE);
+		}
+		
+	}
+}

@@ -1,0 +1,71 @@
+package controlador;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
+import modelo.Conexion;
+
+import vista.AdministrarConexiones;
+import vista.GestionCursosyDeportes;
+import vista.GestionMonitoresyAlumnos;
+import vista.VentanaPrincipal;
+
+public class ControladorAdministrarConexion implements ActionListener{
+
+	
+	AdministrarConexiones acs;
+	VentanaPrincipal princi;
+	
+	public ControladorAdministrarConexion(AdministrarConexiones ac){
+		acs=ac;
+	}
+	
+	public void iniciar(){
+		acs.setVisible(true);
+		acs.btnAceptar.setActionCommand("Conexion Aceptar");
+		acs.btnAceptar.addActionListener(this);
+		//---------------------------------------------------
+		acs.btnCancelar.setActionCommand("Conexion Cancelar");
+		acs.btnCancelar.addActionListener(this);
+		//---------------------------------------------------
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	String comando=e.getActionCommand();
+	if(comando.equals("Conexion Aceptar")){
+		String ip=acs.textFieldip.getText();
+		String bdname=acs.textFieldbdname.getText();
+		String user=acs.textFielduser.getText();
+		String pass=acs.textFieldpass.getText();
+		
+		if(pass.length()<=1){
+			
+			pass="";
+			
+		}
+		
+		Conexion c=new Conexion(ip,bdname,user,pass);
+		c.escribirArchivo();
+		JOptionPane.showMessageDialog(null, "Se han cambiado los datos de la conexion");
+		acs.dispose();
+		princi=new VentanaPrincipal();
+			princi.setVisible(true);
+			new ControladorVentanaPrinci(princi).iniciar();	
+	}
+	
+	
+	if(comando.equals("Conexion Cancelar")){
+
+		JOptionPane.showMessageDialog(null, "Cancelado");
+		acs.dispose();
+		VentanaPrincipal v=new VentanaPrincipal();
+		v.setVisible(true);
+		new ControladorVentanaPrinci(v).iniciar();
+	}
+	
+	}
+}

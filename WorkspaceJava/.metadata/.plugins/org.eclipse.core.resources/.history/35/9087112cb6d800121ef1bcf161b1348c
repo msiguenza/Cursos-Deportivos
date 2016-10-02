@@ -1,0 +1,518 @@
+package VistasFinales;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Calendar;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import javax.swing.ImageIcon;
+import javax.swing.border.LineBorder;
+
+import VistasFinales.*;
+
+
+
+import conexiones.*;
+
+import modelo.*;
+
+
+
+public class GestionCursosyDeportes extends JFrame {
+
+	public JPanel contentPane;
+	public JTable tablaCursos;
+	public JTable tablaDeportes;
+	public JButton btnAtrs;
+	public JButton btnCrearCurso;
+	public JButton btnModificarCurso;
+	public JButton btnRefrescarCurso;
+	public JButton btnEliminarCurso;
+	public JButton btnCrearDeporte;
+	public JButton btnModificarDeporte;
+	public JButton btnRefrescarDeporte;
+	public JButton btnEliminarDeporte; 
+	
+	public Conexion conx=new Conexion();
+	
+	public ModeloCursosyDeportes cursoydeport;
+	
+	public GestionCursosyDeportes() throws IOException, SQLException {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("src/Images/admin.png"));
+		setUndecorated(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 947, 568);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		setResizable(false);
+		setLocationRelativeTo(null);
+		
+		
+		cursoydeport= new ModeloCursosyDeportes();
+		///---------------------///
+		
+		
+		btnAtrs = new JButton("Atr\u00E1s");
+		btnAtrs.setMnemonic('x');
+		btnAtrs.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnAtrs.setIcon(new ImageIcon("src/images/return.png"));
+		btnAtrs.setBounds(796, 506, 112, 37);
+		contentPane.add(btnAtrs);
+		btnAtrs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		
+		
+ //----------------- Zona Cursos ------------------
+		
+		JLabel lblAlumnos = new JLabel("Cursos ");
+		lblAlumnos.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlumnos.setFont(new Font("Rockwell Condensed", Font.BOLD | Font.ITALIC, 16));
+		lblAlumnos.setBounds(42, 11, 666, 23);
+		contentPane.add(lblAlumnos);
+		
+		JScrollPane scrollPane3 = new JScrollPane();
+		scrollPane3.setEnabled(false);
+		scrollPane3.setBorder(new LineBorder(new Color(130, 135, 144)));
+		scrollPane3.setBackground(new Color(255, 250, 205));
+		scrollPane3.setBounds(42, 45, 666, 170);
+		contentPane.add(scrollPane3);
+		
+
+		tablaCursos = new JTable(){
+			public boolean isCellEditable(int rowIndex, int vColIndex) {
+	            return false; //Deshabilitación de Celdas
+		}};
+		tablaCursos.setBackground(new Color(255, 250, 205));
+		tablaCursos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		scrollPane3.setViewportView(tablaCursos);
+		tablaCursos.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent arg0) {
+			}
+			public void mousePressed(MouseEvent arg0) {
+			}
+			public void mouseClicked(MouseEvent arg0) {
+				int filSel=tablaCursos.getSelectedRow();
+			}
+			public void mouseEntered(MouseEvent e) {
+			}
+			public void mouseExited(MouseEvent e) {
+			}
+		});
+		prepararTablaCursos();
+		
+		btnCrearCurso = new JButton("Crear");
+		btnCrearCurso.setMnemonic('c');
+		btnCrearCurso.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnCrearCurso.setIcon(new ImageIcon("src/images/confirm.png"));
+	
+		btnCrearCurso.setBounds(736, 58, 117, 29);
+		contentPane.add(btnCrearCurso);
+		btnCrearCurso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					btnCrearCursoPerformed(arg0);
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				} catch (SQLException e) {
+					
+					e.printStackTrace();
+				}
+			}
+			private void btnCrearCursoPerformed(ActionEvent arg0) throws IOException, SQLException {
+				CrearCursos ca=new CrearCursos();
+				ca.setVisible(true);
+			}
+		});
+		
+		btnModificarCurso = new JButton("Modificar");
+		btnModificarCurso.setMnemonic('m');
+		btnModificarCurso.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnModificarCurso.setIcon(new ImageIcon("src/images/modify.png"));
+		btnModificarCurso.setBounds(736, 94, 117, 29);
+		contentPane.add(btnModificarCurso);
+		btnModificarCurso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					btnModificarCurso(arg0);
+				} catch (IOException e) {
+				
+					e.printStackTrace();
+				} catch (SQLException e) {
+					
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		btnRefrescarCurso = new JButton("Refrescar");
+		btnRefrescarCurso.setMnemonic('r');
+		btnRefrescarCurso.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnRefrescarCurso.setIcon(new ImageIcon("src/images/refresh.png"));
+		btnRefrescarCurso.setBounds(736, 163, 117, 29);
+		contentPane.add(btnRefrescarCurso);
+		setLocationRelativeTo(null);
+		
+		// Actualizar los datos cuando se hayan modificado o creado cursos
+		btnRefrescarCurso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnRefrescarPerformed(arg0);
+			}
+			private void btnRefrescarPerformed(ActionEvent arg0) {
+				prepararTablaCursos();
+			}
+		});
+		
+		
+		btnEliminarCurso = new JButton("Eliminar");
+		btnEliminarCurso.setMnemonic('e');
+		btnEliminarCurso.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnEliminarCurso.setIcon(new ImageIcon("src/images/adiooos.png"));
+		btnEliminarCurso.setBounds(736, 128, 117, 29);
+		contentPane.add(btnEliminarCurso);
+		btnEliminarCurso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnEliminarCursoPerformed(arg0);
+			}
+		});
+		
+ //--------------- Zona Deportes -----------------------------------------------------------------------
+		
+		JLabel lblMonitores = new JLabel("Deportes");
+		lblMonitores.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMonitores.setFont(new Font("Rockwell Condensed", Font.BOLD | Font.ITALIC, 16));
+		lblMonitores.setBounds(42, 270, 666, 23);
+		contentPane.add(lblMonitores);
+		
+		btnCrearDeporte = new JButton("Crear");
+		btnCrearDeporte.setMnemonic('a');
+		btnCrearDeporte.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnCrearDeporte.setIcon(new ImageIcon("src/images/confirm.png"));
+		btnCrearDeporte.setBounds(736, 321, 117, 29);
+		contentPane.add(btnCrearDeporte);
+		btnCrearDeporte.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CrearDeportes cm;
+				try {
+					cm = new CrearDeportes();
+					cm.setVisible(true);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		
+		btnModificarDeporte = new JButton("Modificar");
+		btnModificarDeporte.setMnemonic('o');
+		btnModificarDeporte.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnModificarDeporte.setIcon(new ImageIcon("src/images/modify.png"));
+		btnModificarDeporte.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnModificarDeportesPerformed(e);
+			}
+		});
+		btnModificarDeporte.setBounds(736, 355, 117, 29);
+		contentPane.add(btnModificarDeporte);
+		
+		btnEliminarDeporte = new JButton("Eliminar");
+		btnEliminarDeporte.setMnemonic('m');
+		btnEliminarDeporte.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnEliminarDeporte.setIcon(new ImageIcon("src/images/adiooos.png"));
+		btnEliminarDeporte.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnEliminarDeportesPerformed(arg0);
+			}
+		});
+		btnEliminarDeporte.setBounds(736, 389, 117, 29);
+		contentPane.add(btnEliminarDeporte);
+		
+		JScrollPane scrollPane2 = new JScrollPane();
+		scrollPane2.setEnabled(false);
+		scrollPane2.setBorder(new LineBorder(new Color(130, 135, 144)));
+		scrollPane2.setBackground(new Color(255, 250, 205));
+		scrollPane2.setBounds(48, 307, 660, 170);
+		contentPane.add(scrollPane2);
+		
+		
+		tablaDeportes = new JTable(){
+			public boolean isCellEditable(int rowIndex, int vColIndex) {
+	            return false; //Deshabilitación de Celdas
+		}};
+		tablaDeportes.setBackground(new Color(255, 250, 205));
+		tablaDeportes.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		scrollPane2.setViewportView(tablaDeportes);
+		
+		prepararTablaDeportes();
+		
+		btnRefrescarDeporte = new JButton("Refrescar");
+		btnRefrescarDeporte.setMnemonic('s');
+		btnRefrescarDeporte.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnRefrescarDeporte.setIcon(new ImageIcon("src/images/refresh.png"));
+		btnRefrescarDeporte.setBounds(736, 423, 117, 29);
+		contentPane.add(btnRefrescarDeporte);
+		
+		JLabel label = new JLabel("");
+		label.setIcon(new ImageIcon("src\\images\\informacion.jpg"));
+		label.setBounds(0, 0, 947, 568);
+		contentPane.add(label);
+		btnRefrescarDeporte.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				prepararTablaDeportes();
+			}
+		});
+		
+	}
+	
+	//-------- Zona Acciones Cursos ------------
+	
+	private void btnModificarCurso(ActionEvent arg0) throws IOException, SQLException {
+		
+	
+		
+		int fselCurso=tablaCursos.getSelectedRow();
+		String datosFilaDep[]= new String[tablaCursos.getColumnCount()]; 
+		
+		if(fselCurso==-1){
+			JOptionPane.showMessageDialog(null, "Selecciona un curso");
+		}else{
+			
+			//Recojo los datos de las columnas que necesito de la fila seleccionada, los paso
+			//a un array y lo paso al constructor del Jdialog ModificarCurso para iniciarlizarlos para la modificación
+			// en sus textfields Correspondientes
+			datosFilaDep[0]=(String)tablaCursos.getValueAt(fselCurso, 0);//cod_curso
+			datosFilaDep[1]=(String)tablaCursos.getValueAt(fselCurso, 1);//nombrecurso
+			datosFilaDep[2]=(String)tablaCursos.getValueAt(fselCurso, 2);//nombredeporte
+			datosFilaDep[3]=(String)tablaCursos.getValueAt(fselCurso, 3);//hora_inicio
+			datosFilaDep[4]=(String)tablaCursos.getValueAt(fselCurso, 4);//fecha_inicio
+			datosFilaDep[5]=(String)tablaCursos.getValueAt(fselCurso, 5);//nivel
+			datosFilaDep[6]=(String)tablaCursos.getValueAt(fselCurso, 6);//dnimonitor
+			datosFilaDep[7]=(String)tablaCursos.getValueAt(fselCurso, 7);//plazas
+			
+			
+		
+			ModificarCursos modcurso;
+			modcurso = new ModificarCursos(datosFilaDep);
+			modcurso.setVisible(true);
+			
+		
+		}
+		
+		
+	}
+	
+	protected void btnEliminarCursoPerformed(ActionEvent arg0) {
+		int filsel;
+		String cod_curso;
+		int r;
+		filsel=tablaCursos.getSelectedRow();
+		
+		if(filsel==-1){
+			JOptionPane.showMessageDialog(null, "Selecciona el curso");
+		}else{
+			
+			cod_curso=(String) tablaCursos.getValueAt(filsel, 0);
+			r=JOptionPane.showConfirmDialog(null, "¿Desea eliminar el curso seleccionado con código del curso: "+cod_curso+"?","Eliminar",JOptionPane.YES_NO_OPTION);
+			if(r==JOptionPane.YES_OPTION){
+				try {
+				cursoydeport.EliminarCursos(cod_curso);
+				} catch (SQLException e1) {
+					JOptionPane.showMessageDialog(null,"Error al borrar la tupla.");
+					JOptionPane.showMessageDialog(null, e1.getCause());
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					 JOptionPane.showMessageDialog(null, "Error en la conexión con la base de datos");
+				}
+			}
+		}
+		
+	}
+	
+
+	public void prepararTablaCursos() {
+		try{
+			
+			DefaultTableModel m;
+			
+			String titulos[] = {"Código_Curso", "Nombre Curso","Nombre_Deporte","Hora_Inicio","Fecha_Inicio", "Nivel","DNI_Monitor","Plazas","Plazas Libres"};
+			m = new DefaultTableModel(null,titulos);
+			
+			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(m);
+			tablaCursos.setRowSorter(sorter);
+	     	
+			DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+			tcr.setHorizontalAlignment(SwingConstants.CENTER);
+			
+		
+			String fila[]=new String[titulos.length];
+			tablaCursos.setModel(m);
+			
+			ResultSet resultSql = cursoydeport.prepararTablaCursos();
+			
+			while(resultSql.next()){
+					fila[0]=resultSql.getString("cod_curso");
+					fila[1]=resultSql.getString("nombrecurso");
+					fila[2]=resultSql.getString("nombredeporte");
+					fila[3]=resultSql.getString("hora_inicio");
+					fila[4]=resultSql.getString("fecha_inicio");
+					fila[5]=resultSql.getString("nivel");
+					fila[6]=resultSql.getString("dnimonitor");
+					fila[7]=resultSql.getString("plazas");
+					fila[8]=resultSql.getString("Plazas_Libres");
+					
+					
+					m.addRow(fila);
+			}
+			cursoydeport.prepararTablaCursos();
+			int i=0;
+			while(i<titulos.length){
+			tablaCursos.getColumnModel().getColumn(i).setCellRenderer(tcr);
+				i++;
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al extraer los datos de la tabla");
+		}
+	}
+	
+	//-------- Zona acciones Deportes ----------
+		protected void btnModificarDeportesPerformed(ActionEvent e) {
+			int fselDeportes=tablaDeportes.getSelectedRow();
+			String datosFilaDep[]= new String[tablaDeportes.getColumnCount()]; 
+			
+			if(fselDeportes==-1){
+				JOptionPane.showMessageDialog(null, "Selecciona una fila");
+			}else{
+				
+				//Recojo los datos de las columnas que necesito de la fila seleccionada, los paso
+				//a un array y lo paso al constructor del Jdialog ModificarMaterial para iniciarlizarlos para la modificación
+				// en sus textfields Correspondientes
+				datosFilaDep[0]=(String)tablaDeportes.getValueAt(fselDeportes, 0);//nombredeporte
+				datosFilaDep[1]=(String)tablaDeportes.getValueAt(fselDeportes, 1);//instalacion
+				datosFilaDep[2]=(String)tablaDeportes.getValueAt(fselDeportes, 2);//riesgo
+				
+			
+				ModificarDeporte mdep;
+				try {
+					mdep = new ModificarDeporte(datosFilaDep);
+					mdep.setVisible(true);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			
+			}
+		}
+		
+		protected void btnEliminarDeportesPerformed(ActionEvent arg0) {
+			String nombredeporte;
+			int filSelTd=tablaDeportes.getSelectedRow();
+			int res;
+			
+			
+	if(filSelTd==-1){
+				JOptionPane.showMessageDialog(null, "Selecciona una fila");
+			}else{
+				nombredeporte=(String)tablaDeportes.getValueAt(filSelTd, 0);
+				
+					res=JOptionPane.showConfirmDialog(null, "¿Desea eliminar el deporte seleccionado con nombre: "+nombredeporte+"?","Eliminar",JOptionPane.YES_NO_OPTION);
+					if(res==JOptionPane.YES_OPTION){
+						try {
+							cursoydeport.EliminarDeportes(nombredeporte);
+							JOptionPane.showMessageDialog(null,"Deporte eliminado con exito");
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+							JOptionPane.showMessageDialog(null,"Error al borrar la tupla.");
+							JOptionPane.showMessageDialog(null, e1.getCause());
+						} catch (IOException e1) {
+							e1.printStackTrace();
+							 JOptionPane.showMessageDialog(null, "Error en la conexión con la base de datos");
+						}
+					}
+					}
+	}
+		
+		
+
+		
+			
+		public void prepararTablaDeportes() {
+			try{
+				
+				DefaultTableModel m;
+				
+				String titulos[] = {"Nombre del Deporte","Instalación","Riesgo"};
+				m = new DefaultTableModel(null,titulos);
+				
+				TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(m);
+				tablaDeportes.setRowSorter(sorter);
+		     	
+				DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+				tcr.setHorizontalAlignment(SwingConstants.CENTER);
+			
+				String fila[]=new String[titulos.length];
+				tablaDeportes.setModel(m);
+				
+				ResultSet resultSql = cursoydeport.prepararTablaDeportes();
+				
+				while(resultSql.next()){
+						fila[0]=resultSql.getString("nombredeporte");
+						fila[1]=resultSql.getString("instalacion");
+						fila[2]=resultSql.getString("riesgo");
+						
+						m.addRow(fila);
+				}
+				cursoydeport.prepararTablaDeportes();
+				int i;
+				i=0;
+				while(i<titulos.length){
+					tablaDeportes.getColumnModel().getColumn(i).setCellRenderer(tcr);
+					i++;
+				}
+			}catch(Exception e){
+				JOptionPane.showMessageDialog(null, "Error al extraer los datos de la tabla");
+			}
+}
+		}

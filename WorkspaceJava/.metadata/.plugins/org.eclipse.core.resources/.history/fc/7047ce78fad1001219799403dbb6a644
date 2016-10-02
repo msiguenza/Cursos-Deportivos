@@ -1,0 +1,14 @@
+package modelo;
+
+public class ModeloCursosyDeportes {
+
+	
+	
+	public  ModeloCursosyDeportes(){
+		
+		Conexion conx = new Conexion("localhost", "cursosdeportivos", "root", null);
+		
+		
+	}
+	
+}

@@ -1,0 +1,142 @@
+package VistasFinales;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JScrollBar;
+
+public class GestionMonitoresyAlumnos extends JFrame {
+
+	private JPanel contentPane;
+	private JTable table;
+	private JTable tablaAlumnos;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					GestionMonitoresyAlumnos frame = new GestionMonitoresyAlumnos();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public GestionMonitoresyAlumnos() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 919, 590);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		panel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panel.setBounds(0, 0, 919, 568);
+		contentPane.add(panel);
+		
+		JButton btnatras = new JButton("Atr\u00E1s");
+		btnatras.setMnemonic('x');
+		btnatras.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnatras.setBounds(796, 506, 112, 37);
+		panel.add(btnatras);
+		
+		JLabel labelAlumnos = new JLabel("Alumnos ");
+		labelAlumnos.setHorizontalAlignment(SwingConstants.CENTER);
+		labelAlumnos.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 16));
+		labelAlumnos.setBounds(42, 11, 666, 23);
+		panel.add(labelAlumnos);
+		
+		table = new JTable();
+		table.setBounds(0, 0, 1, 1);
+		panel.add(table);
+		
+		JButton butnCrearAlumno = new JButton("Crear");
+		butnCrearAlumno.setMnemonic('c');
+		butnCrearAlumno.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		butnCrearAlumno.setBounds(736, 58, 117, 29);
+		panel.add(butnCrearAlumno);
+		
+		JButton btnModificarAlumno = new JButton("Modificar");
+		btnModificarAlumno.setMnemonic('m');
+		btnModificarAlumno.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnModificarAlumno.setBounds(736, 94, 117, 29);
+		panel.add(btnModificarAlumno);
+		
+		JButton btnRefrescarAlumno = new JButton("Refrescar");
+		btnRefrescarAlumno.setMnemonic('r');
+		btnRefrescarAlumno.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnRefrescarAlumno.setBounds(736, 163, 117, 29);
+		panel.add(btnRefrescarAlumno);
+		
+		JButton btnEliminarAlumno = new JButton("Eliminar");
+		btnEliminarAlumno.setMnemonic('e');
+		btnEliminarAlumno.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnEliminarAlumno.setBounds(736, 128, 117, 29);
+		panel.add(btnEliminarAlumno);
+		
+		JLabel label_1 = new JLabel("Monitores");
+		label_1.setHorizontalAlignment(SwingConstants.CENTER);
+		label_1.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 16));
+		label_1.setBounds(42, 270, 666, 23);
+		panel.add(label_1);
+		
+		JButton btncrearmonitor = new JButton("Crear");
+		btncrearmonitor.setMnemonic('a');
+		btncrearmonitor.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btncrearmonitor.setBounds(736, 321, 117, 29);
+		panel.add(btncrearmonitor);
+		
+		JButton btnmodificarmonitor = new JButton("Modificar");
+		btnmodificarmonitor.setMnemonic('o');
+		btnmodificarmonitor.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnmodificarmonitor.setBounds(736, 355, 117, 29);
+		panel.add(btnmodificarmonitor);
+		
+		JButton btneliminarmonitor = new JButton("Eliminar");
+		btneliminarmonitor.setMnemonic('m');
+		btneliminarmonitor.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btneliminarmonitor.setBounds(736, 389, 117, 29);
+		panel.add(btneliminarmonitor);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBackground(new Color(255, 250, 205));
+		scrollPane_1.setBounds(48, 307, 660, 170);
+		panel.add(scrollPane_1);
+		
+		JButton btnrefrescarmonitor = new JButton("Refrescar");
+		btnrefrescarmonitor.setMnemonic('s');
+		btnrefrescarmonitor.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnrefrescarmonitor.setBounds(736, 423, 117, 29);
+		panel.add(btnrefrescarmonitor);
+		
+		tablaAlumnos = new JTable();
+		tablaAlumnos.setBounds(52, 46, 656, 205);
+		panel.add(tablaAlumnos);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(704, 46, -652, 205);
+		panel.add(scrollPane);
+		scrollPane.add(tablaAlumnos);
+	}
+}

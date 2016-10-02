@@ -1,0 +1,32 @@
+package modelo;
+
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+
+import conexiones.Conexion;
+
+public class ModeloCrearCurso {
+
+
+	Conexion conx;
+	
+	public  ModeloCrearCurso() throws IOException, SQLException{
+		
+		conx = new Conexion();
+		
+	}
+	
+	public ResultSet CrearCurso() {
+		return null;
+		
+
+	
+	}
+}
+	

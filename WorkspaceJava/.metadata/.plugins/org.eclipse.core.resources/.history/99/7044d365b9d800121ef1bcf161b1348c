@@ -1,0 +1,140 @@
+package controlador;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import conexiones.*;
+import modelo.ModeloCrearAlumnos;
+import modelo.ModeloCrearCurso;
+import modelo.ModeloCursosyDeportes;
+import modelo.ModeloModificarMonitores;
+
+import VistasFinales.*;
+
+public class ControladorModificarMonitores implements ActionListener{
+
+	
+	ModificarMonitores modifimonitores;
+	ModeloModificarMonitores modelomodificarmonitores;
+	
+	
+	public ControladorModificarMonitores(ModificarMonitores modificarmonitores) throws IOException, SQLException{
+		modifimonitores=modificarmonitores;
+		modelomodificarmonitores = new ModeloModificarMonitores();
+	}
+	
+	public void iniciar(){
+		modifimonitores.setVisible(true);
+		modifimonitores.btnGuardarCambios.setActionCommand("Guardar Cambios");
+		modifimonitores.btnGuardarCambios.addActionListener(this);
+		//---------------------------------------------------
+		modifimonitores.btnCancelar.setActionCommand("Salir");
+		modifimonitores.btnCancelar.addActionListener(this);
+		
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	String comando=e.getActionCommand();
+	
+
+	if (comando.equals("Guardar Cambios")) {
+		 try{
+				String dnimonitor, nombre, apellidos,telefono,nomina,cod_curso;
+				
+				dnimonitor=this.modifimonitores.textFieldDNI.getText();
+				nombre=this.modifimonitores.textFieldnombre.getText();
+				apellidos=this.modifimonitores.textFieldapellidos.getText();
+				telefono=this.modifimonitores.textFieldTLF.getText();
+				nomina=this.modifimonitores.textFieldNomina.getText();
+				cod_curso=this.modifimonitores.text
+				
+				if(this.modifimonitores.textFieldNomina.getText().equals("0")){
+						
+						cod_curso = ""; 
+						
+						if (this.textFieldCod_Curso.getText().equals("")){
+						 	JOptionPane.showMessageDialog(null,"El campo cod_ curso esta vacio, debe rellenarlo obligatoriamente");
+						 } else {
+							 
+							 Statement prest1=(Statement) conx.getConectado().createStatement();
+							 ResultSet rs = prest1.executeQuery("SELECT * FROM cursos WHERE cod_curso = '"+textFieldCod_Curso.getText()+"'");
+							 
+							 
+							 
+							 if (rs.first()) {
+								 
+								modifimoni.ModificarMonitores(nombre, apellidos, telefono, nomina, dnimonitor);
+								 
+								
+									JOptionPane.showMessageDialog(null, "Monitor modificado con éxito");
+									dispose();
+									
+							 } else {
+								 JOptionPane.showInternalMessageDialog(null, "No existe el curso");
+							 }
+						 }
+					}else if (textFieldNomina.getText().equals("1")){
+						
+
+						if (textFieldCod_Curso.getText().equals("")) {
+							modifimoni.ModificarMonitores(nombre, apellidos, telefono, nomina, dnimonitor);
+							JOptionPane.showMessageDialog(null, "Monitor modificado con éxito");
+							dispose();
+						} else {
+							 Statement prest1=(Statement) conx.getConectado().createStatement();
+							 ResultSet rs = prest1.executeQuery("SELECT * FROM cursos WHERE cod_curso = '"+textFieldCod_Curso.getText()+"'");
+							 
+							 if (rs.first()) {
+								 
+								modifimoni.ModificarMonitores(nombre, apellidos, telefono, nomina, dnimonitor);
+								
+									JOptionPane.showMessageDialog(null, "Monitor creado con éxito");
+									dispose();
+									
+							 } else {
+								 JOptionPane.showInternalMessageDialog(null, "No existe el curso");
+							 }
+						}
+							
+				if(dnimonitor.length()<=0){
+					JOptionPane.showMessageDialog(null, "El DNI del monitor es obligatorio");
+				}else{
+					modifimoni.ModificarMonitores(nombre, apellidos, telefono, nomina, dnimonitor);
+					JOptionPane.showMessageDialog(null, "Monitor modificado con éxito");
+					dispose();
+				}	
+					} else {
+						JOptionPane.showMessageDialog(null, "El valor de la nomina es 0 (Sin nomina) o valor 1 (En nomina)");
+					}
+				
+		 }catch(SQLException exSql){
+				JOptionPane.showMessageDialog(null, exSql.getMessage());
+			}catch(Exception e){
+				e.printStackTrace();
+			    JOptionPane.showMessageDialog(null, "Error en la conexión con la base de datos","Error",JOptionPane.ERROR_MESSAGE);
+		}		 
+		
+	}
+	
+
+	if (comando.equals("Salir")) {
+		this.modifimonitores.dispose();
+	}
+	
+	
+	}
+	
+	
+}
+

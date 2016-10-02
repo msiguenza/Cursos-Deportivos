@@ -1,0 +1,54 @@
+package modelo;
+
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+
+import conexiones.Conexion;
+
+public class ModeloModificarCursos {
+
+
+	Conexion conx;
+	
+	public  ModeloModificarCursos() throws IOException, SQLException{
+		
+		conx = new Conexion();
+		
+	}
+	
+	public void ModificarModificarCurso(String cod_curso, String nombredeporte, String hora_inicio, String fecha_inicio, String nivel, String dnimonitor, String plazas) throws SQLException, IOException {
+	
+		
+		String sql="UPDATE cursos SET nombredeporte=?, hora_inicio=?, fecha_inicio=?, nivel=?, dnimonitor=?, plazas=?  where cod_curso=?";
+		PreparedStatement prest=(PreparedStatement) conx.getConectado().prepareStatement(sql);
+
+		
+		
+		prest.setString(1,nombredeporte);
+		prest.setString(2,hora_inicio );
+		prest.setString(3,fecha_inicio );
+		prest.setString(4,nivel);
+		prest.setString(5,dnimonitor );
+		prest.setString(6,plazas );
+		prest.setString(7, cod_curso);
+		
+		
+		prest.executeUpdate();
+	
+			JOptionPane.showMessageDialog(null, "Curso modificado con éxito");
+			
+}
+
+	
+}
+
+	
+	
+
+	

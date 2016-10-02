@@ -1,0 +1,79 @@
+package modelo;
+
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+
+import conexiones.Conexion;
+
+public class ModeloCrearMonitores {
+
+
+	Conexion conx;
+	
+	public  ModeloCrearMonitores() throws IOException, SQLException{
+		
+		conx = new Conexion();
+		
+	}
+	
+	public ResultSet CrearMonitor(String dnimonitor, String nombre, String apellidos, int telefono, int nomina) throws SQLException, IOException {
+		
+		
+				//if (nomina==1) {
+					
+					//SELECT PARA COMPROBAR QUE EL CURSO EXISTE
+				//	Statement statement = conx.getConectado().createStatement();
+				//	ResultSet result = statement.executeQuery("");
+				//	result.getInt(0);
+					
+				//	if (siexite) {
+						//UPDATE CURSO SET DNIMONITOR=DNIMONITOR WHERE IDCURSO = IDCRUSO
+						
+						String sql="INSERT INTO monitores (dnimonitor,nombre,apellidos,telefono,nomina) VALUES" + "(?,?,?,?,?)";//Consulta preparada para introducir los valores posteriormente
+						
+						
+						PreparedStatement prest=(PreparedStatement) conx.getConectado().prepareStatement(sql);
+						
+						prest.setString(1, dnimonitor);
+						prest.setString(2, nombre);
+						prest.setString(3, apellidos);
+						prest.setInt(4, telefono);
+						prest.setInt(5, nomina);
+				//	} else {
+						//no existe
+				//	}
+					
+					
+					
+				//} else {
+				//	String sql="INSERT INTO monitores (dnimonitor,nombre,apellidos,telefono,nomina) VALUES" + "(?,?,?,?,?)";//Consulta preparada para introducir los valores posteriormente
+					
+					
+				//	PreparedStatement prest=(PreparedStatement) conx.getConectado().prepareStatement(sql);
+					
+					prest.setString(1, dnimonitor);
+					prest.setString(2, nombre);
+					prest.setString(3, apellidos);
+					prest.setInt(4, telefono);
+					prest.setInt(5, nomina);
+			//	}
+
+				
+				
+				
+				
+			
+		
+
+	return null;
+	
+	}
+}
+	

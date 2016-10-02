@@ -1,0 +1,16 @@
+package controlador;
+
+import vista.GestionCursosyDeportes;
+
+public class ControladorCursosyDeportes {
+
+	public ControladorCursosyDeportes(GestionCursosyDeportes cursdeport) {
+		
+	}
+
+	public void iniciar() {
+	
+		
+	}
+
+}

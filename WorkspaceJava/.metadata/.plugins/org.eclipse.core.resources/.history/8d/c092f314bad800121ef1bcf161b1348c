@@ -1,0 +1,81 @@
+package controlador;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import conexiones.*;
+import modelo.ModeloCrearAlumnos;
+import modelo.ModeloCursosyDeportes;
+
+import VistasFinales.*;
+
+public class ControladorCrearAlumnos implements ActionListener{
+
+	
+	CrearAlumnos crearalum;
+	ModeloCrearAlumnos modelocrearalumnos;
+	
+	
+	public ControladorCrearAlumnos(CrearAlumnos crearalumnos) throws IOException, SQLException{
+		crearalum=crearalumnos;
+		modelocrearalumnos = new ModeloCrearAlumnos();
+		iniciar();
+	}
+	
+	public void iniciar(){
+		crearalum.setVisible(true);
+		crearalum.btnCrearAlumno.setActionCommand("Crear Alumno");
+		crearalum.btnCrearAlumno.addActionListener(this);
+		//---------------------------------------------------
+		crearalum.Salir.setActionCommand("Salir");
+		crearalum.Salir.addActionListener(this);
+		
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	String comando=e.getActionCommand();
+	
+
+	if (comando.equals("Crear Alumno")) {
+		String dni, nombre, apellido, direccion, edad, cod_curso;
+		int tipo;
+		
+		dni=this.crearalum.textFieldDni.getText();
+		nombre=this.crearalum.textFieldNombre.getText();
+		apellido=this.crearalum.textFieldApellidos.getText();
+		direccion=this.crearalum.textFieldDir.getText();
+		edad=this.crearalum.textFieldEdad.getText();
+		cod_curso=this.crearalum.textFieldCod_Curso.getText();
+		
+		if(dni.length()<=0 || cod_curso.length()<=0){
+			JOptionPane.showMessageDialog(null, "El dni y el código del curso son obligatorios");
+		}else{
+			
+			JOptionPane.showMessageDialog(null, "Alumno creado con éxito");
+			
+		}
+		
+	}
+	
+
+	if (comando.equals("Salir")) {
+		this.crearalum.dispose();
+	}
+	
+	
+	}
+	
+	
+}
+

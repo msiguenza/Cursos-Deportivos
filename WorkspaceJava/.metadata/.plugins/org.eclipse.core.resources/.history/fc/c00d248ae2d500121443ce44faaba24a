@@ -1,0 +1,205 @@
+package VistasFinales;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import javax.swing.ImageIcon;
+import javax.swing.border.LineBorder;
+
+import conexiones.*;
+public class GestionAlumnosyMonitores extends JFrame {
+
+	public JPanel contentPane;
+	public JTable tablaCursos;
+	public JTable tablaDeportes;
+	public JButton btnAtrs;
+	public JButton btnCrearCursos;
+	public JButton btnModificarCurso;
+	public JButton btnRefrescarCurso;
+	public JButton btnEliminarCurso;
+	public JButton btnCrearDeportes;
+	public JButton btnModificarDeporte;
+	public JButton btnEliminarDeporte;
+	public JButton btnRefrescarDeporte;
+	private JLabel label;
+
+	
+	public GestionAlumnosyMonitores() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("src/Images/admin.png"));
+		setUndecorated(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 947, 568);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		setResizable(false);
+		setLocationRelativeTo(null);
+		
+		///---------------------///
+		
+		
+		btnAtrs = new JButton("Atr\u00E1s");
+		btnAtrs.setMnemonic('x');
+		btnAtrs.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnAtrs.setIcon(new ImageIcon("src/images/return.png"));
+		btnAtrs.setBounds(796, 506, 112, 37);
+		contentPane.add(btnAtrs);
+		
+		
+		
+ //----------------- Zona Curso ------------------
+		
+		JLabel lblCursos = new JLabel("Cursos ");
+		lblCursos.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCursos.setFont(new Font("Rockwell Condensed", Font.BOLD | Font.ITALIC, 16));
+		lblCursos.setBounds(42, 11, 666, 23);
+		contentPane.add(lblCursos);
+		
+		JScrollPane scrollPane3 = new JScrollPane();
+		scrollPane3.setBackground(new Color(255, 250, 205));
+		scrollPane3.setBounds(42, 45, 666, 170);
+		contentPane.add(scrollPane3);
+		
+
+		tablaCursos = new JTable(){
+			public boolean isCellEditable(int rowIndex, int vColIndex) {
+	            return false; //Deshabilitación de Celdas
+		}};
+		tablaCursos.setBackground(new Color(255, 250, 205));
+		tablaCursos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		scrollPane3.setViewportView(tablaCursos);
+		
+		
+		btnCrearCursos = new JButton("Crear");
+		btnCrearCursos.setMnemonic('c');
+		btnCrearCursos.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnCrearCursos.setIcon(new ImageIcon("src/images/confirm.png"));
+	
+		btnCrearCursos.setBounds(736, 58, 117, 29);
+		contentPane.add(btnCrearCursos);
+		
+		
+		btnModificarCurso = new JButton("Modificar");
+		btnModificarCurso.setMnemonic('m');
+		btnModificarCurso.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnModificarCurso.setIcon(new ImageIcon("src/images/modify.png"));
+		btnModificarCurso.setBounds(736, 94, 117, 29);
+		contentPane.add(btnModificarCurso);
+		
+		
+		btnRefrescarCurso = new JButton("Refrescar");
+		btnRefrescarCurso.setMnemonic('r');
+		btnRefrescarCurso.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnRefrescarCurso.setIcon(new ImageIcon("src/images/refresh.png"));
+		btnRefrescarCurso.setBounds(736, 163, 117, 29);
+		contentPane.add(btnRefrescarCurso);
+		setLocationRelativeTo(null);
+		
+		
+		
+		
+		btnEliminarCurso = new JButton("Eliminar");
+		btnEliminarCurso.setMnemonic('e');
+		btnEliminarCurso.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnEliminarCurso.setIcon(new ImageIcon("src/images/adiooos.png"));
+		btnEliminarCurso.setBounds(736, 128, 117, 29);
+		contentPane.add(btnEliminarCurso);
+		
+		
+ //--------------- Zona Deportes -----------------------------------------------------------------------
+		
+		JLabel lblDeportes = new JLabel("Deportes");
+		lblDeportes.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDeportes.setFont(new Font("Rockwell Condensed", Font.BOLD | Font.ITALIC, 16));
+		lblDeportes.setBounds(42, 270, 666, 23);
+		contentPane.add(lblDeportes);
+		
+		btnCrearDeportes = new JButton("Crear");
+		btnCrearDeportes.setMnemonic('a');
+		btnCrearDeportes.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnCrearDeportes.setIcon(new ImageIcon("src/images/confirm.png"));
+		btnCrearDeportes.setBounds(736, 321, 117, 29);
+		contentPane.add(btnCrearDeportes);
+	
+		
+		btnModificarDeporte = new JButton("Modificar");
+		btnModificarDeporte.setMnemonic('o');
+		btnModificarDeporte.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnModificarDeporte.setIcon(new ImageIcon("src/images/modify.png"));
+		
+		btnModificarDeporte.setBounds(736, 355, 117, 29);
+		contentPane.add(btnModificarDeporte);
+		
+		btnEliminarDeporte = new JButton("Eliminar");
+		btnEliminarDeporte.setMnemonic('m');
+		btnEliminarDeporte.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnEliminarDeporte.setIcon(new ImageIcon("src/images/adiooos.png"));
+		
+			
+		btnEliminarDeporte.setBounds(736, 389, 117, 29);
+		contentPane.add(btnEliminarDeporte);
+		
+		JScrollPane scrollPane2 = new JScrollPane();
+		scrollPane2.setBackground(new Color(255, 250, 205));
+		scrollPane2.setBounds(48, 307, 660, 170);
+		contentPane.add(scrollPane2);
+		
+		
+		tablaDeportes = new JTable(){
+			public boolean isCellEditable(int rowIndex, int vColIndex) {
+	            return false; //Deshabilitación de Celdas
+		}};
+		tablaDeportes.setBackground(new Color(255, 250, 205));
+		tablaDeportes.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		scrollPane2.setViewportView(tablaDeportes);
+		
+		
+		btnRefrescarDeporte = new JButton("Refrescar");
+		btnRefrescarDeporte.setMnemonic('s');
+		btnRefrescarDeporte.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnRefrescarDeporte.setIcon(new ImageIcon("src/images/refresh.png"));
+		btnRefrescarDeporte.setBounds(736, 423, 117, 29);
+		contentPane.add(btnRefrescarDeporte);
+		
+		label = new JLabel("");
+		label.setIcon(new ImageIcon("src\\images\\informacion.jpg"));
+		label.setBounds(0, 0, 947, 568);
+		contentPane.add(label);
+		
+			
+	}
+	
+	
+	}
+	

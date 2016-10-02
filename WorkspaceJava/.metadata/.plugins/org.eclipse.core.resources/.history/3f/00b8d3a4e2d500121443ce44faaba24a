@@ -1,0 +1,275 @@
+package controlador;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import conexiones.*;
+import modelo.ModeloAlumnosyMonitores;
+import modelo.ModeloCursosyDeportes;
+
+import VistasFinales.*;
+
+public class ControladorMonitoresyAlumnos implements ActionListener{
+
+	
+	GestionAlumnosyMonitores gestalumnomon;
+	ModeloAlumnosyMonitores modeloAlumnosyMonitores;
+	
+	
+	public ControladorMonitoresyAlumnos(GestionAlumnosyMonitores monalum) throws IOException, SQLException{
+		gestalumnomon=monalum;
+		modeloAlumnosyMonitores = new ModeloAlumnosyMonitores();
+		iniciar();
+	}
+	
+	public void iniciar(){
+		gestalumnomon.setVisible(true);
+		//---------------------------------------------------
+		gestalumnomon.btnAtrs.setActionCommand("Atras");
+		gestalumnomon.btnAtrs.addActionListener(this);
+		
+		gestalumnomon.btnCrearAlumno.setActionCommand("Crear Alumno");
+		gestalumnomon.btnCrearAlumno.addActionListener(this);
+		//---------------------------------------------------
+		gestalumnomon.btnModificarAlumno.setActionCommand("Modificar Alumno");
+		gestalumnomon.btnModificarAlumno.addActionListener(this);
+		//---------------------------------------------------
+		
+		gestalumnomon.btnRefrescarAlumno.setActionCommand("Refrescar Alumno");
+		gestalumnomon.btnRefrescarAlumno.addActionListener(this);
+		//---------------------------------------------------
+		gestalumnomon.btnEliminarAlumno.setActionCommand("Eliminar Alumno");
+		gestalumnomon.btnEliminarAlumno.addActionListener(this);
+		//---------------------------------------------------
+		
+		gestalumnomon.btnCrearMonitor.setActionCommand("Crear Monitor");
+		gestalumnomon.btnCrearMonitor.addActionListener(this);
+		//---------------------------------------------------
+		gestalumnomon.btnModificarMonitor.setActionCommand("Modificar Monitor");
+		gestalumnomon.btnModificarMonitor.addActionListener(this);
+		//---------------------------------------------------
+		
+		gestalumnomon.btnRefrescarMonitor.setActionCommand("Refrescar Monitor");
+		gestalumnomon.btnRefrescarMonitor.addActionListener(this);
+		//---------------------------------------------------
+		gestalumnomon.btnEliminarMonitor.setActionCommand("Eliminar Monitor");
+		gestalumnomon.btnEliminarMonitor.addActionListener(this);
+		//---------------------------------------------------
+	
+		generarTablaAlumnos();
+		generarTablaMonitores();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	String comando=e.getActionCommand();
+	
+	if (comando.equals("Atras")) {
+		this.gestalumnomon.dispose();
+	}
+	
+	if (comando.equals("Crear Alumno")) {
+		CrearAlumnos ca=new CrearAlumnos();
+		ca.setVisible(true);
+	}
+	
+	if (comando.equals("Modificar Alumno")) {
+		
+	}
+
+	if (comando.equals("Refrescar Alumno")) {
+	
+		generarTablaAlumnos();
+	}
+
+	if (comando.equals("Eliminar Alumno")) {
+		
+		
+		int filsel;
+		String dni;
+		int r;
+		filsel=this.gestalumnomon.tablaAlumnos.getSelectedRow();
+		
+		if(filsel==-1){
+			JOptionPane.showMessageDialog(null, "Selecciona el Alumno");
+		}else{
+			
+			dni=(String) this.gestalumnomon.tablaAlumnos.getValueAt(filsel, 0);
+			r=JOptionPane.showConfirmDialog(null, "¿Desea eliminar el Alumno seleccionado con Dni: "+dni+"?","Eliminar",JOptionPane.YES_NO_OPTION);
+			if(r==JOptionPane.YES_OPTION){
+				try {
+					this.modeloAlumnosyMonitores.EliminarAlumnos(dni);
+				} catch (SQLException e1) {
+					JOptionPane.showMessageDialog(null,"Error al borrar la tupla.");
+					JOptionPane.showMessageDialog(null, e1.getCause());
+				} catch (IOException e1) {
+					 JOptionPane.showMessageDialog(null, "Error en la conexión con la base de datos");
+				}
+			}
+		}
+	
+	
+}
+	
+	if (comando.equals("Crear Monitor")) {
+		
+	}
+
+	if (comando.equals("Modificar Monitor")) {
+	
+	}
+
+	if (comando.equals("Refrescar Monitor")) {
+	
+		generarTablaMonitores();
+	}
+	
+	if (comando.equals("Eliminar Monitor")) {
+		
+	try{
+
+			
+			String dnimonitor;
+			int filSelTm=this.gestalumnomon.tablaMonitores.getSelectedRow();
+			int res;
+			
+			if(filSelTm==-1){
+				JOptionPane.showMessageDialog(null, "Selecciona una fila");
+			}else{
+				
+				dnimonitor=(String) this.gestalumnomon.tablaMonitores.getValueAt(filSelTm, 0);
+				
+					res=JOptionPane.showConfirmDialog(null, "¿Desea eliminar el Monitor seleccionado con dni: "+dnimonitor+"?","Eliminar",JOptionPane.YES_NO_OPTION);
+				
+			}
+		
+		}catch(Exception ex){
+			ex.printStackTrace();
+			 JOptionPane.showMessageDialog(null, "Error en la conexión con la base de datos");
+		}
+		
+	}
+
+	}
+	
+public void generarTablaAlumnos () {
+		
+		try{
+			
+			DefaultTableModel m;
+			
+			String titulos[] = {"DNI", "Nombre","Apellido","Dirección", "Edad","cod_curso"};
+			m = new DefaultTableModel(null,titulos);
+			
+			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(m);
+			this.gestalumnomon.tablaAlumnos.setRowSorter(sorter);
+	     	
+			DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+			tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		
+			String fila[]=new String[titulos.length];
+			this.gestalumnomon.tablaAlumnos.setModel(m);
+			
+			ResultSet resultSql = modeloAlumnosyMonitores.prepararTablaAlumnos();
+			
+			while(resultSql.next()){
+				fila[0]=resultSql.getString("dni");
+				fila[1]=resultSql.getString("nombre");
+				fila[2]=resultSql.getString("apellido");
+				fila[3]=resultSql.getString("direccion");
+				fila[4]=resultSql.getString("edad");
+				fila[5]=resultSql.getString("cod_curso");
+				
+				m.addRow(fila);
+		}
+			
+			int i;
+			i=0;
+			while(i<titulos.length){
+				this.gestalumnomon.tablaAlumnos.getColumnModel().getColumn(i).setCellRenderer(tcr);
+				i++;
+			}
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null, "Error al extraer los datos de la tabla");
+		}
+		
+		this.gestalumnomon.tablaAlumnos = new JTable(){
+			public boolean isCellEditable(int rowIndex, int vColIndex) {
+	            return false; //Deshabilitación de Celdas
+		}};
+		
+		
+	}
+
+
+public void generarTablaMonitores(){
+	
+	try{
+		
+		DefaultTableModel m;
+		
+		String titulos[] = {"DNI","Nombre","Apellidos","Teléfono","Nómina"};
+		m = new DefaultTableModel(null,titulos);
+		
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(m);
+		this.gestalumnomon.tablaMonitores.setRowSorter(sorter);
+     	
+		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+		tcr.setHorizontalAlignment(SwingConstants.LEFT);
+		ResultSet resultSql = modeloAlumnosyMonitores.prepararTablaMonitores();
+	
+		String fila[]=new String[titulos.length];
+		this.gestalumnomon.tablaMonitores.setModel(m);
+		while(resultSql.next()){
+			fila[0]=resultSql.getString("dnimonitor");
+			fila[1]=resultSql.getString("nombre");
+			fila[2]=resultSql.getString("apellidos");
+			fila[3]=resultSql.getString("telefono");
+			fila[4]=resultSql.getString("nomina");
+			
+			m.addRow(fila);
+	}
+		
+		int i=0;
+		while(i<titulos.length){
+			this.gestalumnomon.tablaMonitores.getColumnModel().getColumn(i).setCellRenderer(tcr);
+			i++;
+		}
+		
+	}catch(Exception e){
+		e.printStackTrace();
+		JOptionPane.showMessageDialog(null, "Error al extraer los datos de la tabla");
+	}
+	
+	
+	this.gestalumnomon.tablaMonitores = new JTable(){
+		public boolean isCellEditable(int rowIndex, int vColIndex) {
+            return false; //Deshabilitación de Celdas
+	}};
+	
+	
+	
+}
+
+
+
+	
+		
+		
+		
+	}
+
+

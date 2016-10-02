@@ -1,0 +1,63 @@
+package modelo;
+
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+
+import conexiones.Conexion;
+
+public class ModeloModificarCursos {
+
+
+	Conexion conx;
+	
+	public  ModeloModificarCursos() throws IOException, SQLException{
+		
+		conx = new Conexion();
+		
+	}
+	
+	public boolean ModificarModificarCurso(String cod_curso,String nombreCurso, String nombredeporte, String hora_inicio, String fecha_inicio, String nivel, String dnimonitor, String plazas) throws SQLException, IOException {
+	
+		try{
+		String sql="UPDATE cursos SET nombredeporte='"+nombredeporte+"', hora_inicio=?, fecha_inicio=?, nivel=?, dnimonitor=?, plazas=?  where cod_curso=?";
+	/*	PreparedStatement prest=(PreparedStatement) conx.getConectado().prepareStatement(sql);
+
+		
+		
+		prest.setString(1,cod_curso);
+		prest.setString(2, nombredeporte);
+		prest.setString(3, hora_inicio);
+		prest.setString(4,fecha_inicio);
+		prest.setString(5, nivel);
+		prest.setString(6, dnimonitor);
+		prest.setString(7, plazas);
+		
+		
+		prest.executeUpdate();
+		*/
+		Statement st=(Statement) conx.getConectado().createStatement();
+		st.executeUpdate(sql);
+		
+		
+		return true;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+			
+}
+
+	
+}
+
+	
+	
+
+	

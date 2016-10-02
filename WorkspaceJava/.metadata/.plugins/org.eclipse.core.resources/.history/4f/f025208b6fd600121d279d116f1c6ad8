@@ -1,0 +1,271 @@
+package VistasFinales;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import javax.swing.ImageIcon;
+import javax.swing.border.LineBorder;
+
+import modelo.ModeloAlumnosyMonitores;
+
+import vista.CrearAlumnos;
+
+import conexiones.*;
+import controlador.ControladorMonitoresyAlumnos;
+public class GestionAlumnosyMonitores extends JFrame {
+
+	public JPanel contentPane;
+	public JTable tablaAlumnos;
+	public JTable tablaMonitores;
+	public JButton btnAtrs;
+	public JButton btnCrearAlumnos;
+	public JButton btnModificarAlumnos;
+	public JButton btnRefrescarAlumnos;
+	public JButton btnEliminarAlumnos;
+	public JButton btnCrearMonitores;
+	public JButton btnModificarMonitores;
+	public JButton btnEliminarMonitores;
+	public JButton btnRefrescarMonitores;
+	private JLabel label;
+
+	Conexion conx  = new Conexion();
+	
+	public ControladorMonitoresyAlumnos monalum;
+	
+	ModeloAlumnosyMonitores alummoni;
+	
+	public GestionAlumnosyMonitores() throws IOException, SQLException {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("src/Images/admin.png"));
+		setUndecorated(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 947, 568);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		setResizable(false);
+		setLocationRelativeTo(null);
+		
+		///---------------------///
+		
+		
+		btnAtrs = new JButton("Atr\u00E1s");
+		btnAtrs.setMnemonic('x');
+		btnAtrs.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnAtrs.setIcon(new ImageIcon("src/images/return.png"));
+		btnAtrs.setBounds(796, 506, 112, 37);
+		contentPane.add(btnAtrs);
+		
+		
+		
+ //----------------- Zona Alumnos ------------------
+		
+		JLabel lblAlumnos = new JLabel("Alumnos");
+		lblAlumnos.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlumnos.setFont(new Font("Rockwell Condensed", Font.BOLD | Font.ITALIC, 16));
+		lblAlumnos.setBounds(42, 11, 666, 23);
+		contentPane.add(lblAlumnos);
+		
+		JScrollPane scrollPane3 = new JScrollPane();
+		scrollPane3.setBackground(new Color(255, 250, 205));
+		scrollPane3.setBounds(42, 45, 666, 170);
+		contentPane.add(scrollPane3);
+		
+
+		tablaAlumnos = new JTable(){
+			public boolean isCellEditable(int rowIndex, int vColIndex) {
+	            return false; //Deshabilitación de Celdas
+		}};
+		tablaAlumnos.setBackground(new Color(255, 250, 205));
+		tablaAlumnos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		scrollPane3.setViewportView(tablaAlumnos);
+		
+		tablaAlumnos.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent arg0) {
+			}
+			public void mousePressed(MouseEvent arg0) {
+			}
+			public void mouseClicked(MouseEvent arg0) {
+				int filSel=tablaAlumnos.getSelectedRow();
+			}
+			public void mouseEntered(MouseEvent e) {
+			}
+			public void mouseExited(MouseEvent e) {
+			}
+		});
+		
+		
+		btnCrearAlumnos = new JButton("Crear");
+		btnCrearAlumnos.setMnemonic('c');
+		btnCrearAlumnos.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnCrearAlumnos.setIcon(new ImageIcon("src/images/confirm.png"));
+	
+		btnCrearAlumnos.setBounds(736, 58, 117, 29);
+		contentPane.add(btnCrearAlumnos);
+		
+		
+		
+		btnModificarAlumnos = new JButton("Modificar");
+		btnModificarAlumnos.setMnemonic('m');
+		btnModificarAlumnos.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnModificarAlumnos.setIcon(new ImageIcon("src/images/modify.png"));
+		btnModificarAlumnos.setBounds(736, 94, 117, 29);
+		contentPane.add(btnModificarAlumnos);
+		
+		
+		btnRefrescarAlumnos = new JButton("Refrescar");
+		btnRefrescarAlumnos.setMnemonic('r');
+		btnRefrescarAlumnos.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnRefrescarAlumnos.setIcon(new ImageIcon("src/images/refresh.png"));
+		btnRefrescarAlumnos.setBounds(736, 163, 117, 29);
+		contentPane.add(btnRefrescarAlumnos);
+		setLocationRelativeTo(null);
+		
+		
+		
+		
+		btnEliminarAlumnos = new JButton("Eliminar");
+		btnEliminarAlumnos.setMnemonic('e');
+		btnEliminarAlumnos.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnEliminarAlumnos.setIcon(new ImageIcon("src/images/adiooos.png"));
+		btnEliminarAlumnos.setBounds(736, 128, 117, 29);
+		contentPane.add(btnEliminarAlumnos);
+		
+		
+		
+		
+		
+ //--------------- Zona Monitores -----------------------------------------------------------------------
+		
+		JLabel lblMonitores = new JLabel("Monitores");
+		lblMonitores.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMonitores.setFont(new Font("Rockwell Condensed", Font.BOLD | Font.ITALIC, 16));
+		lblMonitores.setBounds(42, 270, 666, 23);
+		contentPane.add(lblMonitores);
+		
+		btnCrearMonitores = new JButton("Crear");
+		btnCrearMonitores.setMnemonic('a');
+		btnCrearMonitores.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnCrearMonitores.setIcon(new ImageIcon("src/images/confirm.png"));
+		btnCrearMonitores.setBounds(736, 321, 117, 29);
+		contentPane.add(btnCrearMonitores);
+	
+		
+		btnModificarMonitores = new JButton("Modificar");
+		btnModificarMonitores.setMnemonic('o');
+		btnModificarMonitores.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnModificarMonitores.setIcon(new ImageIcon("src/images/modify.png"));
+		
+		btnModificarMonitores.setBounds(736, 355, 117, 29);
+		contentPane.add(btnModificarMonitores);
+		
+		btnEliminarMonitores = new JButton("Eliminar");
+		btnEliminarMonitores.setMnemonic('m');
+		btnEliminarMonitores.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnEliminarMonitores.setIcon(new ImageIcon("src/images/adiooos.png"));
+		
+			
+		btnEliminarMonitores.setBounds(736, 389, 117, 29);
+		contentPane.add(btnEliminarMonitores);
+		
+		JScrollPane scrollPane2 = new JScrollPane();
+		scrollPane2.setBackground(new Color(255, 250, 205));
+		scrollPane2.setBounds(48, 307, 660, 170);
+		contentPane.add(scrollPane2);
+		
+		
+		tablaMonitores = new JTable(){
+			public boolean isCellEditable(int rowIndex, int vColIndex) {
+	            return false; //Deshabilitación de Celdas
+		}};
+		tablaMonitores.setBackground(new Color(255, 250, 205));
+		tablaMonitores.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		scrollPane2.setViewportView(tablaMonitores);
+		
+		
+		btnRefrescarMonitores = new JButton("Refrescar");
+		btnRefrescarMonitores.setMnemonic('s');
+		btnRefrescarMonitores.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnRefrescarMonitores.setIcon(new ImageIcon("src/images/refresh.png"));
+		btnRefrescarMonitores.setBounds(736, 423, 117, 29);
+		contentPane.add(btnRefrescarMonitores);
+		
+		label = new JLabel("");
+		label.setIcon(new ImageIcon("src\\images\\informacion.jpg"));
+		label.setBounds(0, 0, 947, 568);
+		contentPane.add(label);
+		
+		alummoni = new ModeloAlumnosyMonitores();	
+	}
+	
+	
+	protected void btnEliminarMonitoresPerformed(ActionEvent arg0) {
+		try{
+
+			String sql="DELETE FROM monitores WHERE dnimonitor=?";
+			PreparedStatement prest=(PreparedStatement) conx.getConectado().prepareStatement(sql);
+			
+			String dnimonitor;
+			int filSelTm=tablaMonitores.getSelectedRow();
+			int res;
+			
+			if(filSelTm==-1){
+				JOptionPane.showMessageDialog(null, "Selecciona una fila");
+			}else{
+				
+				dnimonitor=(String) tablaMonitores.getValueAt(filSelTm, 0);
+				
+					res=JOptionPane.showConfirmDialog(null, "¿Desea eliminar el Monitor seleccionado con dni: "+dnimonitor+"?","Eliminar",JOptionPane.YES_NO_OPTION);
+					if(res==JOptionPane.YES_OPTION){
+						prest.setString(1,dnimonitor);
+						prest.executeUpdate();
+						//prepararTablaMonitores();
+						this.alummoni.prepararTablaMonitores();
+					}
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null,"Error al borrar la tupla.");
+			JOptionPane.showMessageDialog(null, e.getCause());
+		}catch(Exception ex){
+			ex.printStackTrace();
+			 JOptionPane.showMessageDialog(null, "Error en la conexión con la base de datos");
+		}
+	}
+	
+	
+	}
+	
+	
+	
+	

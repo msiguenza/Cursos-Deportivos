@@ -1,0 +1,56 @@
+package modelo;
+
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+
+import conexiones.Conexion;
+
+public class ModeloModificarCursos {
+
+
+	Conexion conx;
+	
+	public  ModeloModificarCursos() throws IOException, SQLException{
+		
+		conx = new Conexion();
+		
+	}
+	
+
+	public void btnGurdarCambios(String nombredeporte,String instalacion, String riesgo){
+		try{
+				String sql="UPDATE deportes SET nombredeporte=?, instalacion=?, riesgo=?";
+				PreparedStatement prest=(PreparedStatement) conx.getConectado().prepareStatement(sql);
+				
+				
+				prest.setString(1, nombredeporte);
+				prest.setString(2, instalacion);
+				prest.setString(3, riesgo);
+				
+				if(nombredeporte.length()<=0){
+					JOptionPane.showMessageDialog(null, "El nombre del deporte es obligatorio");
+				}else{
+					prest.executeUpdate();
+					JOptionPane.showMessageDialog(null, "Deporte modificado con éxito");
+					
+				}
+				
+			}catch(SQLException exSql){
+				JOptionPane.showMessageDialog(null, exSql.getMessage());
+			}catch(Exception e){
+			    JOptionPane.showMessageDialog(null, "Error en la conexión con la base de datos","Error",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	}
+
+	
+	
+}
+	

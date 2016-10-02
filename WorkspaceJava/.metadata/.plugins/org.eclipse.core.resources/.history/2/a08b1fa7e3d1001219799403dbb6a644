@@ -1,0 +1,93 @@
+package controlador;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
+import modelo.Conexion;
+
+import vista.AdministrarConexiones;
+import vista.GestionCursosyDeportes;
+import vista.GestionMonitoresyAlumnos;
+import vista.VentanaPrincipal;
+
+public class ControladorMonitoresyAlumnos implements ActionListener{
+
+	
+	GestionMonitoresyAlumnos gestmonalum;
+	
+	
+	public ControladorMonitoresyAlumnos(GestionMonitoresyAlumnos ac){
+		gestmonalum=ac;
+	}
+	
+	public void iniciar(){
+		gestmonalum.setVisible(true);
+		gestmonalum.btnCrearAlumno.setActionCommand("Crear Alumno");
+		gestmonalum.btnCrearAlumno.addActionListener(this);
+		//---------------------------------------------------
+		gestmonalum.btnModificarAlumno.setActionCommand("Modificar Alumno");
+		gestmonalum.btnModificarAlumno.addActionListener(this);
+		//---------------------------------------------------
+		
+		gestmonalum.btnRefrescarAlumno.setActionCommand("Refrescar Alumno");
+		gestmonalum.btnRefrescarAlumno.addActionListener(this);
+		//---------------------------------------------------
+		gestmonalum.btnEliminarAlumno.setActionCommand("Eliminar Alumno");
+		gestmonalum.btnEliminarAlumno.addActionListener(this);
+		//---------------------------------------------------
+		
+		gestmonalum.btnCrearMonitor.setActionCommand("Crear Monitor");
+		gestmonalum.btnCrearMonitor.addActionListener(this);
+		//---------------------------------------------------
+		gestmonalum.btnModificarMonitor.setActionCommand("Modificar Monitor");
+		gestmonalum.btnModificarMonitor.addActionListener(this);
+		//---------------------------------------------------
+		
+		gestmonalum.btnRefrescarMonitor.setActionCommand("Refrescar Monitor");
+		gestmonalum.btnRefrescarMonitor.addActionListener(this);
+		//---------------------------------------------------
+		gestmonalum.btnEliminarMonitor.setActionCommand("Eliminar Monitor");
+		gestmonalum.btnEliminarMonitor.addActionListener(this);
+		//---------------------------------------------------
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	String comando=e.getActionCommand();
+	if(comando.equals("Conexion Aceptar")){
+		String ip=acs.textFieldip.getText();
+		String bdname=acs.textFieldbdname.getText();
+		String user=acs.textFielduser.getText();
+		String pass=acs.textFieldpass.getText();
+		
+		if(pass.length()<=1){
+			
+			pass="";
+			
+		}
+		
+		Conexion c=new Conexion(ip,bdname,user,pass);
+		c.escribirArchivo();
+		JOptionPane.showMessageDialog(null, "Se han cambiado los datos de la conexion");
+		acs.dispose();
+		princi=new VentanaPrincipal();
+			princi.setVisible(true);
+			new ControladorVentanaPrinci(princi).iniciar();	
+	}
+	
+	
+	if(comando.equals("Conexion Cancelar")){
+
+		JOptionPane.showMessageDialog(null, "Cancelado");
+		acs.dispose();
+		VentanaPrincipal v=new VentanaPrincipal();
+		v.setVisible(true);
+		new ControladorVentanaPrinci(v).iniciar();
+	}
+	
+	}
+}

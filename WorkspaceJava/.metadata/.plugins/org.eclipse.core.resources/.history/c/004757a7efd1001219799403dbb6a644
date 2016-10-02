@@ -1,0 +1,74 @@
+package VistasFinales;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import controlador.ControladorAdministrarConexion;
+import controlador.ControladorVentanaPrinci;
+import javax.swing.JButton;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
+import javax.swing.JLabel;
+import javax.swing.JMenuBar;
+
+import com.mysql.jdbc.Connection;
+
+public class VentanaPrincipal extends JFrame {
+
+	public JPanel contentPane;
+	public ControladorVentanaPrinci princi;
+	public JButton btncursosydeportes;
+	public Connection conex;
+	/**
+	 * Launch the application.
+	 */
+	
+	
+	public JButton btnmonitoresyalumnos;
+
+	/**
+	 * Create the frame.
+	 */
+	public VentanaPrincipal() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 686, 456);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		panel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panel.setBounds(0, 0, 817, 480);
+		contentPane.add(panel);
+		
+		btnmonitoresyalumnos = new JButton("Gesti\u00DBn de Monitores y Alumnos");
+		btnmonitoresyalumnos.setMnemonic('g');
+		btnmonitoresyalumnos.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btnmonitoresyalumnos.setBounds(163, 56, 327, 39);
+		panel.add(btnmonitoresyalumnos);
+		
+		btncursosydeportes = new JButton("Gesti\u00DBn de Cursos y Deportes");
+		btncursosydeportes.setMnemonic('n');
+		btncursosydeportes.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		btncursosydeportes.setBounds(163, 281, 327, 32);
+		panel.add(btncursosydeportes);
+		
+		JLabel label = new JLabel("");
+		label.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		label.setBounds(-23, 0, 840, 481);
+		panel.add(label);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBounds(0, 0, 817, 22);
+		contentPane.add(menuBar);
+		
+		princi=new ControladorVentanaPrinci(this, conex);
+	}
+
+}

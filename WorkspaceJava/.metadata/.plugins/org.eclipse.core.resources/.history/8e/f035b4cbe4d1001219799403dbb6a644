@@ -1,0 +1,12 @@
+package principal;
+
+import controlador.ControladorAdministrarConexion;
+import vista.AdministrarConexiones;
+
+public class Princi {
+
+	public static void main(String[] args) {
+		AdministrarConexiones ac=new AdministrarConexiones();
+		new ControladorAdministrarConexion(ac).iniciar();
+	}
+}

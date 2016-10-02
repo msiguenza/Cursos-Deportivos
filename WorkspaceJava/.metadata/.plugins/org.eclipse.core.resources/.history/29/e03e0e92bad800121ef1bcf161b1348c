@@ -1,0 +1,103 @@
+package controlador;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import com.mysql.jdbc.PreparedStatement;
+
+import conexiones.*;
+
+import modelo.ModeloCrearCurso;
+import modelo.ModeloCursosyDeportes;
+
+import VistasFinales.*;
+
+public class ControladorCrearCursos implements ActionListener{
+
+	
+	CrearCursos crearcurs;
+	ModeloCrearCurso modelocrearcursos;
+	
+	
+	public ControladorCrearCursos(CrearCursos crearcursos) throws IOException, SQLException{
+		crearcurs=crearcursos;
+		modelocrearcursos = new ModeloCrearCurso();
+		iniciar();
+	}
+	
+	public void iniciar(){
+		
+		crearcurs.btnCrearCurso.setActionCommand("Crear Curso");
+		crearcurs.btnCrearCurso.addActionListener(this);
+		//---------------------------------------------------
+		crearcurs.Salir.setActionCommand("Salir");
+		crearcurs.Salir.addActionListener(this);
+		
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	String comando=e.getActionCommand();
+	
+
+	if (comando.equals("Crear Curso")) {
+	
+		
+		try{
+			
+			String cod_curso, nombredeporte, hora_inicio, nivel, dnimonitor,plazas;
+			int tipo;
+			cod_curso=this.crearcurs.textFieldcodcurso.getText();
+			nombredeporte=this.crearcurs.textFieldDeporte.getText();
+			hora_inicio=this.crearcurs.textFieldhora_inicio.getText();
+			nivel=this.crearcurs.textFieldNivel.getText();
+			dnimonitor=this.crearcurs.textFielddnimonitor.getText();
+			plazas=this.crearcurs.textFieldPlazas.getText();
+			
+			String fecha_inicio=this.crearcurs.dateChooserFecha.getDateFormatString();
+			Date fechaDAte=new Date();
+			SimpleDateFormat sdf=new java.text.SimpleDateFormat("yyyy/MM/dd");
+			fecha_inicio=sdf.format(fechaDAte);
+			
+			
+			if(cod_curso.length()<=0 || dnimonitor.length()<=0 || plazas.length()<=0){
+				JOptionPane.showMessageDialog(null, "El código del curso, dni de monitor y las plazas son obligatorias");
+			}else{
+				modelocrearcursos.CrearCurso(cod_curso, nombredeporte, hora_inicio, fecha_inicio, nivel, dnimonitor, plazas);
+				JOptionPane.showMessageDialog(null, "Curso creado con éxito");
+				this.crearcurs.dispose();
+			}
+			
+			}catch(SQLException exSql){
+				JOptionPane.showMessageDialog(null, "Error, posibles causas: \n- Ya existe un Curso con ese código \n- Asegúrese de tener el host activo");
+			} catch (IOException p) {
+				// TODO Auto-generated catch block
+				p.printStackTrace();
+			}
+		}
+		
+	
+	
+
+	if (comando.equals("Salir")) {
+		this.crearcurs.dispose();
+	}
+	
+	
+	}
+	
+	
+}
+

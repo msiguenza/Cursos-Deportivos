@@ -1,0 +1,71 @@
+package controlador;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import conexiones.*;
+import modelo.ModeloCrearAlumnos;
+import modelo.ModeloCrearCurso;
+import modelo.ModeloCursosyDeportes;
+import modelo.ModeloModificarCursos;
+
+import VistasFinales.*;
+
+public class ControladorModificarCursos implements ActionListener{
+
+	
+	ModificarCursos modificursos;
+	ModeloModificarCursos modelomodificarcursos;
+	
+	
+	public ControladorModificarCursos(ModificarCursos modificarcursos) throws IOException, SQLException{
+		modificursos=modificarcursos;
+		modelomodificarcursos = new ModeloModificarCursos();
+	}
+	
+	public void iniciar(){
+		modificursos.setVisible(true);
+		modificursos.btnGuardarCambios.setActionCommand("Guardar Cambios");
+		modificursos.btnGuardarCambios.addActionListener(this);
+		//---------------------------------------------------
+		modificursos.btnCancelar.setActionCommand("Salir");
+		modificursos.btnCancelar.addActionListener(this);
+		
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	String comando=e.getActionCommand();
+	
+
+	if (comando.equals("Guardar Cambios")) {
+		
+		this.modificursos.dispose();
+		
+		
+		
+		
+		
+	}
+	
+
+	if (comando.equals("Salir")) {
+		this.modificursos.dispose();
+	}
+	
+	
+	}
+	
+	
+}
+

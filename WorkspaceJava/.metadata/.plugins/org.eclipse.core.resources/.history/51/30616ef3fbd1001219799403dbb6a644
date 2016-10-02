@@ -1,0 +1,95 @@
+package controlador;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
+import modelo.Conexion;
+import modelo.ModeloCursosyDeportes;
+
+import VistasFinales.*;
+
+public class ControladorCursosyDeportes implements ActionListener{
+
+	
+	GestionCursosyDeportes gestmcursdeport;
+	ModeloCursosyDeportes modeloCursosyDeportes;
+	
+	
+	public ControladorCursosyDeportes(GestionCursosyDeportes cursdeport) throws IOException, SQLException{
+		gestmcursdeport=cursdeport;
+		modeloCursosyDeportes = new ModeloCursosyDeportes();
+	}
+	
+	public void iniciar(){
+		gestmcursdeport.setVisible(true);
+		gestmcursdeport.btnCrearCurso.setActionCommand("Crear Curso");
+		gestmcursdeport.btnCrearCurso.addActionListener(this);
+		//---------------------------------------------------
+		gestmcursdeport.btnModificarCurso.setActionCommand("Modificar Curso");
+		gestmcursdeport.btnModificarCurso.addActionListener(this);
+		//---------------------------------------------------
+		
+		gestmcursdeport.btnRefrescarCurso.setActionCommand("Refrescar Curso");
+		gestmcursdeport.btnRefrescarCurso.addActionListener(this);
+		//---------------------------------------------------
+		gestmcursdeport.btnEliminarCurso.setActionCommand("Eliminar Curso");
+		gestmcursdeport.btnEliminarCurso.addActionListener(this);
+		//---------------------------------------------------
+		
+		gestmcursdeport.btnCrearDeporte.setActionCommand("Crear Deporte");
+		gestmcursdeport.btnCrearDeporte.addActionListener(this);
+		//---------------------------------------------------
+		gestmcursdeport.btnModificarDeporte.setActionCommand("Modificar Deporte");
+		gestmcursdeport.btnModificarDeporte.addActionListener(this);
+		//---------------------------------------------------
+		
+		gestmcursdeport.btnRefrescarDeporte.setActionCommand("Refrescar Deporte");
+		gestmcursdeport.btnRefrescarDeporte.addActionListener(this);
+		//---------------------------------------------------
+		gestmcursdeport.btnEliminarDeporte.setActionCommand("Eliminar Deporte");
+		gestmcursdeport.btnEliminarDeporte.addActionListener(this);
+		//---------------------------------------------------
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	String comando=e.getActionCommand();
+	if(comando.equals("Conexion Aceptar")){
+		String ip=acs.textFieldip.getText();
+		String bdname=acs.textFieldbdname.getText();
+		String user=acs.textFielduser.getText();
+		String pass=acs.textFieldpass.getText();
+		
+		if(pass.length()<=1){
+			
+			pass="";
+			
+		}
+		
+		Conexion c=new Conexion(ip,bdname,user,pass);
+		c.escribirArchivo();
+		JOptionPane.showMessageDialog(null, "Se han cambiado los datos de la conexion");
+		acs.dispose();
+		princi=new VentanaPrincipal();
+			princi.setVisible(true);
+			new ControladorVentanaPrinci(princi).iniciar();	
+	}
+	
+	
+	if(comando.equals("Conexion Cancelar")){
+
+		JOptionPane.showMessageDialog(null, "Cancelado");
+		acs.dispose();
+		VentanaPrincipal v=new VentanaPrincipal();
+		v.setVisible(true);
+		new ControladorVentanaPrinci(v).iniciar();
+	}
+	
+	}
+}
